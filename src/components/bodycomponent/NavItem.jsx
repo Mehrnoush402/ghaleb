@@ -3,7 +3,8 @@ import SpanIcon from '../base/SpanIcon'
 
 const NavItem = () => {
   return (
-    <div className='flex justify-between w-3/4 items-center text-xs'>
+    <>
+      <div className='flex justify-between w-3/4 items-center text-xs sm:hidden'>
         <nav className='flex justify-around text-black list-none gap-x-3'>
             <li>Categories</li>
             <li>Deals</li>
@@ -21,6 +22,16 @@ const NavItem = () => {
             <li>Cart</li>
         </nav>
     </div>
+    <div className='hidden sm:flex'> 
+      <button className=' bg-gray-300 rounded-md'> {/* //this button will have modal */}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+        </svg>
+      </button>
+    </div>
+    </>
+    
+  
   )
 }
 
