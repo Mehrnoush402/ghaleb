@@ -11,7 +11,13 @@ const ProducsExplain = ({cost,productName,materialProduct}) => {
       <div>
         <span className='text-[10px] font-semibold text-gray-600'>{materialProduct}</span>
       </div>
-     <Star/>
+      <div className='flex'>
+      <Star/>
+      <Star/>
+      <Star/>
+      <Star/>
+      <Star/>
+      </div>
     </div>
   )
 }

@@ -1,9 +1,9 @@
 import React from 'react'
 import Image from '../base/Image'
-
+import icons from '../../assets/images/icons.png'
 const Discount = () => {
   return (
-    <div className="flex justify-between items-center bg-orange-500 w-full mt-2 bg-[url('../../assets/images/icons.png')]">
+    <div className="flex justify-between items-center bg-orange-500 w-full mt-2 bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url(${icons})` }}>
         <div className='w-1/5 h-full flex justify-start items-center sm:hidden'>
             <Image src={require("../../assets/images/left-img.png")} width={"140px"} height={"220px"}/></div>
         <div className='flex flex-col justify-center items-center'>
