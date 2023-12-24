@@ -2,6 +2,24 @@ import React from 'react'
 import Star from '../../base/Star'
 
 const ProducsExplain = ({cost,productName,materialProduct}) => {
+ 
+//   const showId=(id,state)=>{
+//     if(state===false && id>1){
+      
+//       // console.log("state :",state);
+//       // console.log("id :",id);
+//       id--
+//       // for (let index = 1; index <= id; id--) {
+//           //  state=false;
+//            console.log("id,state",id,state);
+//            showId(id,state)
+//            return state
+//       // }
+
+
+//     }
+//  }
+
   return (
     <div className='border rounded border-black flex flex-col w-full'>
       <div className='flex justify-between'>
@@ -13,12 +31,11 @@ const ProducsExplain = ({cost,productName,materialProduct}) => {
       </div>
       <div className='flex'>
       <Star/>
-      <Star/>
-      <Star/>
-      <Star/>
-      <Star/>
       </div>
     </div>
+      
+
+      
   )
 }
 

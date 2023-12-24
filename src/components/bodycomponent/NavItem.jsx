@@ -1,7 +1,12 @@
 import React from 'react'
 import SpanIcon from '../base/SpanIcon'
+import UseModal from '../../hooks/UseModal'
+import { createPortal } from 'react-dom'
+import Modal from '../base/Modal'
 
 const NavItem = () => {
+  const [openCart,handleOpenCart]=UseModal(false)
+  
   return (
     <>
       <div className='flex justify-between w-3/4 items-center text-xs sm:hidden'>
@@ -19,7 +24,7 @@ const NavItem = () => {
               </svg>
               </SpanIcon>
               </li>
-            <li>Cart</li>
+            <li onClick={handleOpenCart}>Cart</li>
         </nav>
     </div>
     <div className='hidden sm:flex'> 
@@ -29,6 +34,12 @@ const NavItem = () => {
         </svg>
       </button>
     </div>
+    {createPortal(
+      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false}  classmodal={"w-1/4 flex-col h-full"} classProps={"bg-black bg-opacity-25 inset-0 fixed flex justify-end items-start"}>
+        <p>Modal</p>
+      </Modal>
+      
+      ,document.body)}
     </>
     
   
