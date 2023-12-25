@@ -14,7 +14,7 @@ const ProductCart = ({src,cost,productName,materialProduct}) => {
     </div>
 
 {createPortal(
-  <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false}  classmodal={"w-1/2"} classProps={"bg-black bg-opacity-25 inset-0 fixed flex justify-center items-center"}>
+  <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false}  classModal={"w-1/4 flex-col h-full"} classProps={"justify-end items-start"} classModalBody={""}>
     <p>openCart</p>
   </Modal>
   

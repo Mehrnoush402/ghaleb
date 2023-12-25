@@ -35,7 +35,7 @@ const NavItem = () => {
       </button>
     </div>
     {createPortal(
-      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false}  classmodal={"w-1/4 flex-col h-full"} classProps={"bg-black bg-opacity-25 inset-0 fixed flex justify-end items-start"}>
+      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false} classModal={"w-1/2"} classProps={"justify-center items-center"} classModalBody={""}>
         <p>Modal</p>
       </Modal>
       
