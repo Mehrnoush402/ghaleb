@@ -21,7 +21,7 @@ const ProducsExplain = ({cost,productName,materialProduct}) => {
 //  }
 
   return (
-    <div className='border rounded flex flex-col w-full'>
+    <div className='rounded flex flex-col w-full mt-2'>
       <div className='flex justify-between'>
         <span className='text-[12px] font-semibold w-2/3'>{productName}</span>
         <span className='text-[16px] font-semibold'>{cost}$</span>

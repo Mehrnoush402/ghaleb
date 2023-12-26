@@ -12,7 +12,7 @@ const Star = () => {
           <button
             type="button"
             key={index}
-            onClick={() =>setRating(index)}
+            onClick={() =>setRating(index)}//set another function here for setting index as number of fill star in api
             onMouseEnter={()=>setHover(index)}
             onMouseLeave={()=>setHover(null)}
           >
