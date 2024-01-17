@@ -22,7 +22,7 @@ const NavItem = () => {
     })
     return total;
   } 
-   const checkCart=()=>{
+   const checkCart=()=>{//if cart is empty show alert
     if (!addList.length) {
       alert("Your cart is empty! Please add some items to it");
     }
@@ -47,7 +47,7 @@ const NavItem = () => {
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/>
               </svg>
               </SpanIcon>
-              </li>
+            </li>
             <li onClick={()=>checkCart()}>Cart</li>
         </nav>
     </div>
@@ -66,8 +66,8 @@ const NavItem = () => {
               <p className="text-lg font-semibold">Cart Details</p>
               {addList?.map((item,index)=>{
                 // {setTotalItemsCounter((prev) => prev + item?.counterProduct)} 
-               return (<ProductCart isOpen={true} pictureWidth={"w-[33%] h-[65%]"} explainWidth={"w-[67%] h-full mt-10"} key={index} src={item?.src} cost={item?.cost*item?.counterProduct} productName={item?.name} materialProduct={item?.material} classProduc={"flex relative justify-between items-center w-[70%] gap-x-6"}>
-                              <div className='rounded-full bg-gray-300 text-orange-500 absolute w-8 h-8 flex justify-center items-center top-[85px] left-[75px]'>{item?.counterProduct}</div>
+               return (<ProductCart isOpen={true} pictureStyle={"w-[25%] h-[50%] mb-3"} explainStyle={"w-[75%] h-full mt-10"} key={index} src={item?.src} cost={item?.cost*item?.counterProduct} productName={item?.name} materialProduct={item?.material} classProduc={"flex relative justify-between items-center w-[70%] gap-x-6"}>
+                              <div className='rounded-full bg-gray-300 text-orange-500 absolute w-6 h-6 flex justify-center items-center top-[75px] left-[45px]'>{item?.counterProduct}</div>
                        </ProductCart>
                        
                        

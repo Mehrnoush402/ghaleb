@@ -14,7 +14,7 @@ import DeliveryPolicy from '../DeliveryPolicy'
 // import { useContext } from 'react'
 
 
-const ProductPicture = ({src,keyid,pictureWidth,isOpen}) => {
+const ProductPicture = ({src,keyid,pictureStyle,isOpen}) => {
   const [cacheList]=UseFetch()  // const{counter}=useContext(DataText)
   const [color, setColor] = useState(false)
    const {increaseCount,decreaseCount}=useContext(DataText)
@@ -45,7 +45,7 @@ const ProductPicture = ({src,keyid,pictureWidth,isOpen}) => {
   //     console.log("color :",color);
   // }
   return (
-    <div className={`relative ${pictureWidth} rounded-lg`} onMouseEnter={handleShowSvg} onMouseLeave={()=>setShowSvg(false)}>
+    <div className={`relative ${pictureStyle} rounded-lg`} onMouseEnter={handleShowSvg} onMouseLeave={()=>setShowSvg(false)}>
 
       {/* // for toggle & show heart svg ,bi-cart2 svg in modal and without modal */}
       {!isOpen ? <><div className='absolute rounded-lg inset-0 hover:bg-black hover:opacity-25'></div>
@@ -78,7 +78,7 @@ const ProductPicture = ({src,keyid,pictureWidth,isOpen}) => {
   {createPortal(
       <Modal keyid={keyid} sizeIndex={index} isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={true}  classModal={"w-[30%] h-[95%] p-3"} classProps={"justify-end items-start"} classModalBody={""} sendCount={""}>
         
-           <ProductCart starFix={true} isOpen={true} pictureWidth={"w-full h-2/3"} explainWidth={"w-full mt-2"} key={keyid} src={cacheList[keyid-1]?.src} cost={cacheList[keyid-1]?.cost} productName={cacheList[keyid-1]?.name} materialProduct={cacheList[keyid-1]?.material} classProduc={"flex flex-col items-center w-[70%]"}/>
+           <ProductCart starFix={true} isOpen={true} pictureStyle={"w-full h-2/3"} explainStyle={"w-full mt-2"} key={keyid} src={cacheList[keyid-1]?.src} cost={cacheList[keyid-1]?.cost} productName={cacheList[keyid-1]?.name} materialProduct={cacheList[keyid-1]?.material} classProduc={"flex flex-col items-center w-[70%]"}/>
            <HandleCount/>
            <Size onEvent={getIndex}/>
            <DeliveryPolicy margin={"mt-20"}/>

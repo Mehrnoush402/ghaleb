@@ -56,7 +56,7 @@ const Products = () => {
       {cacheList?.map((item)=>{ 
        
         return(
-          <ProductCart pictureWidth={"w-full h-2/3"} explainWidth={"w-full mt-2"} key={item.id} productCartId={item.id} src={item.src} cost={item.cost} classProduc={"flex flex-col items-center w-[23%]"} productName={item.name} materialProduct={item.material}/>
+          <ProductCart pictureStyle={"w-full h-2/3"} explainStyle={"w-full mt-2"} key={item.id} productCartId={item.id} src={item.src} cost={item.cost} classProduc={"flex flex-col items-center w-[23%]"} productName={item.name} materialProduct={item.material}/>
       )})}
 
        {/* //iterate two list for return one component
