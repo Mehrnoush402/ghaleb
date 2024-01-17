@@ -1,11 +1,35 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import SpanIcon from '../base/SpanIcon'
 import UseModal from '../../hooks/UseModal'
 import { createPortal } from 'react-dom'
 import Modal from '../base/Modal'
+import ProductCart from './product/ProductCart'
+import UseFetch from '../../hooks/UseFetch'
+import { DataText } from '../../views/Home'
+import DeliverInformation from './DeliverInformation'
+import OrderSummery from './OrderSummery'
+import DeliveryPolicy from './DeliveryPolicy'
 
 const NavItem = () => {
   const [openCart,handleOpenCart]=UseModal(false)
+  const{addList,counter}=useContext(DataText)
+  // const[totalItemsCounter,setTotalItemsCounter]=useState(0)
+
+  const totals =()=>{
+    let total=0;
+    addList?.map((item,index)=>{
+      total += item?.counterProduct;
+    })
+    return total;
+  } 
+   const checkCart=()=>{
+    if (!addList.length) {
+      alert("Your cart is empty! Please add some items to it");
+    }
+    else{
+      handleOpenCart()
+    }
+   }
   
   return (
     <>
@@ -24,7 +48,7 @@ const NavItem = () => {
               </svg>
               </SpanIcon>
               </li>
-            <li onClick={handleOpenCart}>Cart</li>
+            <li onClick={()=>checkCart()}>Cart</li>
         </nav>
     </div>
     <div className='hidden sm:flex'> 
@@ -35,8 +59,34 @@ const NavItem = () => {
       </button>
     </div>
     {createPortal(
-      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false} classModal={"w-1/2"} classProps={"justify-center items-center"} classModalBody={""}>
-        <p>Modal</p>
+      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false} classModal={"w-1/2 p-4"} classProps={"justify-center items-center"} classModalBody={"w-full"}>
+        <div className='w-full flex justify-between gap-x-3 p-3'>
+          <div className='leftDiv flex flex-col items-center w-2/3 gap-y-3'>
+            <div className='topDiv flex flex-col p-3 w-full border border-gray-300 rounded'>
+              <p className="text-lg font-semibold">Cart Details</p>
+              {addList?.map((item,index)=>{
+                // {setTotalItemsCounter((prev) => prev + item?.counterProduct)} 
+               return (<ProductCart isOpen={true} pictureWidth={"w-[33%] h-[65%]"} explainWidth={"w-[67%] h-full mt-10"} key={index} src={item?.src} cost={item?.cost*item?.counterProduct} productName={item?.name} materialProduct={item?.material} classProduc={"flex relative justify-between items-center w-[70%] gap-x-6"}>
+                              <div className='rounded-full bg-gray-300 text-orange-500 absolute w-8 h-8 flex justify-center items-center top-[85px] left-[75px]'>{item?.counterProduct}</div>
+                       </ProductCart>
+                       
+                       
+                         
+               )
+              })}
+              
+            </div>
+            <div className='bottomDiv h-1/3 w-full border border-gray-300 rounded'>
+              <DeliverInformation/>
+            </div>
+          </div>
+          <div className='rightDiv flex flex-col justify-between w-1/3 border border-gray-300 rounded'>
+              <OrderSummery totals={totals()}/>
+              <div className='bg-gray-100 p-5'>
+                <DeliveryPolicy/>
+              </div>
+          </div>
+        </div>
       </Modal>
       
       ,document.body)}

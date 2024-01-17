@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import SvgIcon from './SvgIcon'
 import { DataText } from '../../views/Home'
+import UseFetch from '../../hooks/UseFetch'
 
 
 const HandleCount = () => {
-    const{counter,increaseCounter,decreaseCounter}=useContext(DataText)
+    const{counter,increaseCounter,decreaseCounter,sizeList}=useContext(DataText)
+   
   return (
     <div className='rounded-lg border border-gray-300 flex mt-4 w-[35%] h-10'>
         <button className='border-r-[1px] border-gray-300 flex items-center justify-center w-1/3'>
@@ -17,7 +19,7 @@ const HandleCount = () => {
             </SvgIcon>
         </button>
         <button className='cursor-auto flex items-center justify-center w-1/3 text-sm font-semibold text-gray-500'>{counter}</button>
-        <button onclick={""} className='border-l-[1px] border-gray-300 flex justify-center items-center w-1/3' >
+        <button className='border-l-[1px] border-gray-300 flex justify-center items-center w-1/3' >
           <SvgIcon position={""} handleOpenCart={increaseCounter}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-plus-circle" viewBox="0 0 16 16">
                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>

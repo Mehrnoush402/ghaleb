@@ -7,16 +7,20 @@ import Modal from '../../base/Modal'
 import ProductCart from './ProductCart'
 import HandleCount from '../../base/HandleCount'
 import { DataText } from '../../../views/Home'
+import UseFetch from '../../../hooks/UseFetch'
+import Size from '../../base/Size'
+import DeliveryPolicy from '../DeliveryPolicy'
 // import { DataText } from '../../origincomponent/Body'
 // import { useContext } from 'react'
 
 
-const ProductPicture = ({src}) => {
-  // const{counter}=useContext(DataText)
+const ProductPicture = ({src,keyid,pictureWidth,isOpen}) => {
+  const [cacheList]=UseFetch()  // const{counter}=useContext(DataText)
   const [color, setColor] = useState(false)
    const {increaseCount,decreaseCount}=useContext(DataText)
    const [showSvg, setShowSvg] = useState(false)
    const [openCart,handleOpenCart]=UseModal(false)
+   const [index, setIndex] = useState(0)
    
   
    const handleShowSvg =()=>{
@@ -33,12 +37,18 @@ const ProductPicture = ({src}) => {
   const handleCount = () =>{
     color ? decreaseCount():increaseCount()
   }
+
+  const getIndex = (index) =>{ //calback for get index of Size component
+     setIndex(index)
+  }
   // const setAppear=(color)=>{
   //     console.log("color :",color);
   // }
   return (
-    <div className='relative w-full h-2/3' onMouseEnter={handleShowSvg} onMouseLeave={()=>setShowSvg(false)}>
-      <div className='absolute rounded-lg inset-0 hover:bg-black hover:opacity-25'></div>
+    <div className={`relative ${pictureWidth} rounded-lg`} onMouseEnter={handleShowSvg} onMouseLeave={()=>setShowSvg(false)}>
+
+      {/* // for toggle & show heart svg ,bi-cart2 svg in modal and without modal */}
+      {!isOpen ? <><div className='absolute rounded-lg inset-0 hover:bg-black hover:opacity-25'></div>
       <Image src={src} width={""} height={""} imgclass={"w-full h-full"}/>
 
       <div onClick={()=>{setColor(!color),handleCount()}} className='absolute top-3 right-3'>
@@ -53,18 +63,26 @@ const ProductPicture = ({src}) => {
         </svg>
       </SvgIcon>}
       </div>
-      
-    
-    {  showSvg?<SvgIcon position={"absolute top-[45%] right-[45%]"} handleOpenCart={handleOpenCart} >
+      {  showSvg?<SvgIcon position={"absolute top-[45%] right-[45%]"} handleOpenCart={handleOpenCart} >
     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="gray" class="bi bi-cart2" viewBox="0 0 16 16">
       <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
     </svg>
   </SvgIcon>:null}
+      </>:
+      <><Image src={src} width={""} height={""} imgclass={"w-full h-full"}/>
+      </> 
+      }
+      
+    
+    
   {createPortal(
-      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={true}  classModal={"w-[30%] h-[95%] p-3"} classProps={"justify-end items-start"} classModalBody={""} sendCount={""}>
+      <Modal keyid={keyid} sizeIndex={index} isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={true}  classModal={"w-[30%] h-[95%] p-3"} classProps={"justify-end items-start"} classModalBody={""} sendCount={""}>
         
-           <ProductCart src={src} cost={85} productName={"Rounded neck - T shirt 100% Cotton"} materialProduct={"Organic Cotton, Fair Trade quality"} classProduc={"w-[70%]"}/>
+           <ProductCart starFix={true} isOpen={true} pictureWidth={"w-full h-2/3"} explainWidth={"w-full mt-2"} key={keyid} src={cacheList[keyid-1]?.src} cost={cacheList[keyid-1]?.cost} productName={cacheList[keyid-1]?.name} materialProduct={cacheList[keyid-1]?.material} classProduc={"flex flex-col items-center w-[70%]"}/>
            <HandleCount/>
+           <Size onEvent={getIndex}/>
+           <DeliveryPolicy margin={"mt-20"}/>
+           
         
       </Modal>
       

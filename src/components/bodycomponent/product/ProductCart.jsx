@@ -4,13 +4,14 @@ import ProducsExplain from './ProducsExplain'
 import UseModal from '../../../hooks/UseModal'
 import { createPortal } from 'react-dom'
 import Modal from '../../base/Modal'
-const ProductCart = ({src,cost,productName,materialProduct,classProduc}) => {
+const ProductCart = ({children,src,cost,productName,materialProduct,classProduc,productCartId,pictureWidth,explainWidth,isOpen,starFix}) => {
  
   return (
    <>
-    <div className={`'flex flex-col items-center ${classProduc} md:w-[45%] sm:w-full rounded'`}>
-      <ProductPicture src={src}/>
-      <ProducsExplain cost={cost} productName={productName} materialProduct={materialProduct}/>
+    <div className={`${classProduc} md:w-[45%] sm:w-full rounded`}>
+      <ProductPicture isOpen={isOpen} src={src} keyid={productCartId} pictureWidth={pictureWidth}/>
+      <ProducsExplain starFix={starFix} cost={cost} productName={productName} materialProduct={materialProduct} keyid={productCartId} explainWidth={explainWidth}/>
+      {children}
     </div>
    
    </>
