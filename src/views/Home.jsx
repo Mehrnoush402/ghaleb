@@ -13,6 +13,7 @@ const Home = () => {
   const [color, setColor] = useState()//for set index of Size component for set index size and set to db,onclick to cancel button modal
   const [totalCounterCost, setTotalCounterCost] = useState(0)
   const [addList,setAddList]=useState([])
+  const[cacheList]=UseFetch()
   
 
   
@@ -32,7 +33,7 @@ const Home = () => {
 
    }
    const decreaseCounter =()=>{
-    if (counter>=0) {
+    if (counter>0) {
       setCounter(counter-1)
     }
 

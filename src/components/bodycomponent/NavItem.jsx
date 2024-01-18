@@ -59,10 +59,10 @@ const NavItem = () => {
       </button>
     </div>
     {createPortal(
-      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false} classModal={"w-1/2 p-4"} classProps={"justify-center items-center"} classModalBody={"w-full"}>
-        <div className='w-full flex justify-between gap-x-3 p-3'>
-          <div className='leftDiv flex flex-col items-center w-2/3 gap-y-3'>
-            <div className='topDiv flex flex-col p-3 w-full border border-gray-300 rounded'>
+      <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false}  classProps={"justify-center items-center"}  classModal={"w-1/2 flex-col p-4 h-[80vh]"} classModalBody={"w-full h-[95%]"} headerModalClass={"justify-end"}>
+        <div className='w-full flex justify-between gap-x-3 p-3 h-full'>
+          <div className='leftDiv flex flex-col items-center w-[60%] gap-y-3 h-full'>
+            <div className='topDiv h-2/3 overflow-y-scroll flex flex-col p-3 w-full border border-gray-300 rounded'>
               <p className="text-lg font-semibold">Cart Details</p>
               {addList?.map((item,index)=>{
                 // {setTotalItemsCounter((prev) => prev + item?.counterProduct)} 
@@ -80,10 +80,10 @@ const NavItem = () => {
               <DeliverInformation/>
             </div>
           </div>
-          <div className='rightDiv flex flex-col justify-between w-1/3 border border-gray-300 rounded'>
+          <div className='rightDiv h-full flex flex-col justify-between w-[40%] border border-gray-300 rounded'>
               <OrderSummery totals={totals()}/>
-              <div className='bg-gray-100 p-5'>
-                <DeliveryPolicy/>
+              <div className='bg-gray-100'>
+                <DeliveryPolicy margin={"ml-3"}/>
               </div>
           </div>
         </div>

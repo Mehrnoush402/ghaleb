@@ -9,7 +9,7 @@ import { getDocs,collection,doc, getDoc, updateDoc } from 'firebase/firestore' /
   
 
 
-const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,classModalBody,keyid,sizeIndex}) => {
+const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,classModalBody,keyid,sizeIndex,headerModalClass}) => {
   const{counter,setCounter,sizeList,totalCounterCost,setTotalCounterCost,setColor,addList,setAddList}=useContext(DataText)
   const[cacheList]=UseFetch()
   
@@ -79,8 +79,8 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
   
   return (
     <div onClick={handleClose} className={`modal-container bg-black bg-opacity-25 inset-0 fixed flex ${classProps}`}>
-        <div className={`modal bg-white my-3 mr-3 rounded-xl flex flex-wrap flex-row-reverse justify-between ${classModal}`}>
-            <div className='modal-header flex items-start'>
+        <div className={`modal bg-white my-3 mr-3 rounded-xl flex ${classModal}`}>
+            <div className={`modal-header flex items-start ${headerModalClass}`}>
                 <button onClick={handleBtnClose} className='bg-gray-300 w-8 h-8 flex justify-center items-center rounded-full'>
                   <svg xmlns="http://www.w3.org/2000/svg"  width="25" height="25" fill="currentColor"  class="bi bi-x" viewBox="0 0 16 16">
                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>

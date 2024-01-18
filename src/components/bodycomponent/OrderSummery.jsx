@@ -2,7 +2,7 @@ import React from "react";
 const OrderSummery=({totals})=>{
     return(
         <>
-         <div className="flex flex-col items-start justify-center gap-y-4 m-5">
+         <div className="flex flex-col items-start justify-center gap-y-4 ml-3">
             <div className="flex justify-start items-center">
                 <p className="text-black text-lg font-semibold">Order Summary</p>
             </div>

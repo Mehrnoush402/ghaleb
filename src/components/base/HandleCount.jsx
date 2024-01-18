@@ -5,7 +5,7 @@ import UseFetch from '../../hooks/UseFetch'
 
 
 const HandleCount = () => {
-    const{counter,increaseCounter,decreaseCounter,sizeList}=useContext(DataText)
+    const{counter,increaseCounter,decreaseCounter}=useContext(DataText)
    
   return (
     <div className='rounded-lg border border-gray-300 flex mt-4 w-[35%] h-10'>
