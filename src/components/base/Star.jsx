@@ -2,17 +2,28 @@ import React, { useState } from 'react'
 import {db} from '../../config/firebase'
 import { getDocs,collection,doc, getDoc, updateDoc } from 'firebase/firestore'
 import UseFetch from '../../hooks/UseFetch';
+import UseLocalStorage from '../../hooks/UseLocalStorage';
+
 
 const Star = ({keyid,starFix}) => {
-  const [rating, setRating] = useState(0);
+  // const [rating, setRating] = useState(0);
   const [hover,setHover]=useState(null)
   const[cacheList]=UseFetch()
+  const [rating, setRating] = useState(0)
+  const{setItem,getItem}=UseLocalStorage(cacheList)
+
 
   const starRating=async(index)=>{
       try {
         setRating(index)
         const newrate=doc(db,"webappdata",keyid)
         await updateDoc(newrate,{rateStar:index})
+      
+        // localStorage.setItem(`${cacheList[keyid-1].rateStar}`, JSON.stringify(index));
+        
+        // cacheList[keyid-1].rateStar=index;
+        // console.log("cacheListstar: ",cacheList[keyid-1].rateStar);
+        // console.log(cacheList);
         
       } catch (error) {
         console.log("error: ",error);

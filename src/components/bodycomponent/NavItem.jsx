@@ -9,10 +9,13 @@ import { DataText } from '../../views/Home'
 import DeliverInformation from './DeliverInformation'
 import OrderSummery from './OrderSummery'
 import DeliveryPolicy from './DeliveryPolicy'
+import UseLocalStorage from '../../hooks/UseLocalStorage'
 
 const NavItem = () => {
   const [openCart,handleOpenCart]=UseModal(false)
   const{addList,counter}=useContext(DataText)
+  const[cacheList]=UseFetch()
+  const{getItem}=UseLocalStorage(cacheList)
   // const[totalItemsCounter,setTotalItemsCounter]=useState(0)
 
   const totals =()=>{
@@ -28,6 +31,7 @@ const NavItem = () => {
     }
     else{
       handleOpenCart()
+      console.log("getItem: ",getItem());
     }
    }
   

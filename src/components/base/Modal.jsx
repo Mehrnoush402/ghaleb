@@ -1,17 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SpanIcon from './SpanIcon';
 import { DataText } from '../../views/Home';
 import { useContext } from 'react';
 import UseFetch from '../../hooks/UseFetch';
 import { db } from '../../config/firebase' // for set data list of firestore/firebase
-import { getDocs,collection,doc, getDoc, updateDoc } from 'firebase/firestore' // for set data list of firestore/firebase
+import { getDocs,collection,doc, getDoc, updateDoc,setDoc, } from 'firebase/firestore' // for set data list of firestore/firebase
+import UseLocalStorage from '../../hooks/UseLocalStorage';
+// import { reciveData, update } from '../../services/ProductsService';
+// import vitePluginRequire_1705829981414_26253840 from "lodash";
+                                                      
+// import * as RefreshRuntime from "/@react-refresh";
+// import vitePluginRequire from 'vite-plugin-require';
+// import _ from 'lodash';
 
   
 
 
 const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,classModalBody,keyid,sizeIndex,headerModalClass}) => {
-  const{counter,setCounter,sizeList,totalCounterCost,setTotalCounterCost,setColor,addList,setAddList}=useContext(DataText)
-  const[cacheList]=UseFetch()
+  const{counter,setCounter,sizeList,totalCounterCost,setTotalCounterCost,setColor,addList,setAddList,setIsUpdate}=useContext(DataText)
+  const[cacheList,list]=UseFetch()
+  const{setItem,getItem}=UseLocalStorage(cacheList)
   
   
   // const webAppDataCollectionRef =collection(db,"webappdata")
@@ -46,20 +54,51 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
     //   }
 
     // }
+    // const updateData = (id) =>{
+    //    update(id,sizeIndex)
+    //     const newList=reciveData()
+    //     console.log("newlist: ",newList);
+     
+    // }
     
     const updateData = async(id) =>{
+      
      
       const newCounter= doc(db,"webappdata",id)
      await updateDoc(newCounter,{counterProduct:counter,size:sizeList[sizeIndex]})
-    //  setCounter(0)
+    //  cacheList[id-1].counterProduct=counter
+    //  cacheList[id-1].size=sizeList[sizeIndex]
+     setItem(cacheList[id-1].counterProduct,counter)
+    //  localStorage.setItem(`${cacheList[id-1].counterProduct}`, JSON.stringify(counter));
+     setItem(cacheList[id-1].size,sizeList[sizeIndex])
+    //  localStorage.setItem(`${cacheList[id-1].size}`, JSON.stringify(sizeList[sizeIndex]));
+
+    // const NewCacheList=JSON.parse(localStorage.getItem('cacheList'));
+    //  console.log("newcacheListlocal :",NewCacheList);
+     
+     
+     
+     // Requiring the lodash library 
+
+// var _ = require("lodash");
+ 
+// let foundelem = _.findKey(cacheList, {
+//     "productId":id
+// });
+
+// console.log("found_elem: ",foundelem);
+
+
+     
     }
+
      const add=async(id)=>{
        try {
         const newCounter= doc(db,"webappdata",id)
         const get=await getDoc(newCounter)
         addList.push(get?.data())
         setAddList(addList)
-        console.log("addList: ",addList);
+        // console.log("addList: ",addList);
        } catch (error) {
         console.log("error: ",error);
        }
@@ -75,6 +114,12 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
       setCounter(0)
       setColor(-1)
     }
+
+      
+    
+     
+  
+    
     
   
   return (
