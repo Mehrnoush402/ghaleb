@@ -14,13 +14,13 @@ import DeliveryPolicy from '../DeliveryPolicy'
 // import { useContext } from 'react'
 
 
-const ProductPicture = ({src,keyid,pictureStyle,isOpen}) => {
+const ProductPicture = ({src,keyid,pictureStyle,isOpen,handleOpen}) => {
   const [list,cacheList]=UseFetch()  // const{counter}=useContext(DataText)
   const [color, setColor] = useState(false)
-   const {increaseCount,decreaseCount}=useContext(DataText)
+   const {increaseCount,decreaseCount,modalIndex,setModalIndex}=useContext(DataText)
    const [showSvg, setShowSvg] = useState(false)
-   const [openCart,handleOpenCart]=UseModal(false)
-   const [index, setIndex] = useState(0)
+  //  const [openCart,handleOpenCart]=UseModal(false)
+  //  const [index, setIndex] = useState(0)
    
   
    const handleShowSvg =()=>{
@@ -38,14 +38,15 @@ const ProductPicture = ({src,keyid,pictureStyle,isOpen}) => {
     color ? decreaseCount():increaseCount()
   }
 
-  const getIndex = (index) =>{ //calback for get index of Size component
-     setIndex(index)
-  }
+  // const getIndex = (index) =>{ //calback for get index of Size component
+  //    setIndex(index)
+  // }
   // const setAppear=(color)=>{
   //     console.log("color :",color);
   // }
   const testFunction =()=>{
-    handleOpenCart()
+    handleOpen()
+    setModalIndex(keyid)
     console.log("cashlist: ",cacheList);
     console.log("list: ",list);
   }
@@ -80,7 +81,7 @@ const ProductPicture = ({src,keyid,pictureStyle,isOpen}) => {
       
     
     
-  {createPortal(
+  {/* {createPortal(
       <Modal keyid={keyid} sizeIndex={index} isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={true}  classModal={"w-[30%] h-[95%] p-3 flex-wrap flex-row-reverse justify-between lg:w-[50%] md:w-[50%] sm:w-[90%]"} classProps={"justify-end items-start"} classModalBody={""} sendCount={""}>
         
            <ProductCart starFix={true} isOpen={true} pictureStyle={"w-full h-2/3 md:w-[90%] md:h-[55%] sm:w-[50%] sm:h-[40%]"} explainStyle={"w-full mt-2 md:w-[90%] md:h-[35%] sm:w-[50%] sm:h-[20%]"} key={keyid} src={cacheList[keyid-1]?.src} cost={cacheList[keyid-1]?.cost} productName={cacheList[keyid-1]?.name} materialProduct={cacheList[keyid-1]?.material} classProduc={"flex flex-col items-center w-[70%]"}/>
@@ -91,7 +92,7 @@ const ProductPicture = ({src,keyid,pictureStyle,isOpen}) => {
         
       </Modal>
       
-      ,document.body)}
+      ,document.body)} */}
      
       
 

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SpanIcon from './SpanIcon';
 import { DataText } from '../../views/Home';
 import { useContext } from 'react';
 import UseFetch from '../../hooks/UseFetch';
 import { db } from '../../config/firebase' // for set data list of firestore/firebase
-import { getDocs,collection,doc, getDoc, updateDoc,setDoc, } from 'firebase/firestore' // for set data list of firestore/firebase
+import { getDocs,collection,doc,updateDoc,setDoc,getDoc } from 'firebase/firestore' // for set data list of firestore/firebase
 import UseLocalStorage from '../../hooks/UseLocalStorage';
 // import { reciveData, update } from '../../services/ProductsService';
 // import vitePluginRequire_1705829981414_26253840 from "lodash";
@@ -19,10 +19,138 @@ import UseLocalStorage from '../../hooks/UseLocalStorage';
 const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,classModalBody,keyid,sizeIndex,headerModalClass}) => {
   const{counter,setCounter,sizeList,totalCounterCost,setTotalCounterCost,setColor,addList,setAddList,setIsUpdate}=useContext(DataText)
   const[cacheList,list]=UseFetch()
-  const{setItem,getItem}=UseLocalStorage(cacheList)
+  // const[data,setData]=useState({
+  //   cost:0,
+  //   counterProduct:0,
+  //   material:"",
+  //   name:"",
+  //   productId:0,
+  //   rateStar:0,
+  //   size:""
+  // })
+   const [fetchedData, setFetchedData] = useState({})
+
+  // useEffect(() => {
+  //   const fetchData = async()=>{
+  //    try {
+  //     const docProduct= doc(db,"webappdata",`${keyid}`)
+  //     const dataProduct=await getDoc(docProduct)
+      
+  //     if (dataProduct.exists()) {
+  //       console.log("Document data:", dataProduct.data());
+       
+  //       setFetchedData((prevData) => ({
+  //         ...prevData,
+  //         ...dataProduct.data(),
+  //       }));
+  //     }
+  //     console.log("state1 : ",fetchedData);
+  //    }
+  //     catch (error) {
+  //        console.log("error: ",error);
+  //    }
+  //   }
+  //   fetchData()
+   
+    
+  // }, [`${keyid}`])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const docProduct = doc(db, "webappdata", `${keyid}`);
+        const dataProduct = await getDoc(docProduct);
+  
+        if (dataProduct.exists()) {
+          console.log("Document data:", dataProduct.data());
+          setFetchedData(dataProduct.data());
+
+  // setData((prevData) => ({
+  //   ...prevData,
+  //   cost: dataProduct.data().cost || 0,
+  //   counterProduct: dataProduct.data().counterProduct || 0,
+  //   material: dataProduct.data().material || "",
+  //   name: dataProduct.data().name || "",
+  //   productId: dataProduct.data().productId || 0,
+  //   rateStar: dataProduct.data().rateStar || 0,
+  //   size: dataProduct.data().size || "",
+  // }));
+  
+          // setFetchedData((prevData) => {
+          //   return {
+          //     ...prevData,
+          //     ...dataProduct.data(),
+          //   };
+          // });
+            // setData(prevState=>({
+            //       ...prevState,
+            //       [dataProduct.data().key]: [dataProduct.data().value]
+            //     }))
+                // setData((prevData) => ({
+                //   ...prevData,
+                //   cost: 0,
+                //   counterProduct: 0,
+                //   material: "",
+                //   name: "",
+                //   productId: 0,
+                //   rateStar: 0,
+                //   size: "",
+                //   [dataProduct.data().key]: [dataProduct.data().value]
+                // }));
+         
+  
+      
+        }
+        console.log("data1 : ", fetchedData);
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    };
+    fetchData();
+  }, [keyid]);
   
   
-  // const webAppDataCollectionRef =collection(db,"webappdata")
+
+//  useEffect(() => {
+//   setData(prevState=>({
+//     ...prevState,
+//     [fetchedData.key]:[fetchedData.value]
+//   }))
+//   console.log("data2 : ", data);
+//  }, [fetchedData])
+ 
+
+  // const setCartInfo =()=>{
+   
+  //   // setState(
+  //   // { ...state,counterProduct: counter,size:sizeList[sizeIndex]}
+  //   // )
+  //   // console.log("state2 : ",state);
+  // }
+
+  const updateCart=async()=>{
+    try {
+      const newData= doc(db,"webappdata",`${keyid}`)
+      const updateData= await updateDoc(newData,{ ...fetchedData,counterProduct: counter,size:sizeList[sizeIndex]})
+      const docProduct = doc(db, "webappdata", `${keyid}`);
+        const dataProduct = await getDoc(docProduct);
+      setFetchedData(prevState=>({
+        ...prevState,
+        ...dataProduct.data()
+        // counterProduct: counter,
+        // size:sizeList[sizeIndex]
+        
+      }))
+      
+      
+        addList.push(fetchedData)
+        setAddList(addList)
+        console.log("state2 : ",fetchedData);
+        // console.log("addList: ",addList);
+    } catch (error) {
+      console.log("error: ",error);
+    }
+  }
 
     if (!isOpen) return null;
     const handleClose =(e)=>{//for close modal and reset Counter,Size on modal-container
@@ -61,48 +189,48 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
      
     // }
     
-    const updateData = async(id) =>{
+//     const updateData = async(id) =>{
       
      
-      const newCounter= doc(db,"webappdata",id)
-     await updateDoc(newCounter,{counterProduct:counter,size:sizeList[sizeIndex]})
-    //  cacheList[id-1].counterProduct=counter
-    //  cacheList[id-1].size=sizeList[sizeIndex]
-     setItem(cacheList[id-1].counterProduct,counter)
-    //  localStorage.setItem(`${cacheList[id-1].counterProduct}`, JSON.stringify(counter));
-     setItem(cacheList[id-1].size,sizeList[sizeIndex])
-    //  localStorage.setItem(`${cacheList[id-1].size}`, JSON.stringify(sizeList[sizeIndex]));
+//       const newCounter= doc(db,"webappdata",id)
+//      await updateDoc(newCounter,{counterProduct:counter,size:sizeList[sizeIndex]})
+//     //  cacheList[id-1].counterProduct=counter
+//     //  cacheList[id-1].size=sizeList[sizeIndex]
+//      setItem(cacheList[id-1].counterProduct,counter)
+//     //  localStorage.setItem(`${cacheList[id-1].counterProduct}`, JSON.stringify(counter));
+//      setItem(cacheList[id-1].size,sizeList[sizeIndex])
+//     //  localStorage.setItem(`${cacheList[id-1].size}`, JSON.stringify(sizeList[sizeIndex]));
 
-    // const NewCacheList=JSON.parse(localStorage.getItem('cacheList'));
-    //  console.log("newcacheListlocal :",NewCacheList);
+//     // const NewCacheList=JSON.parse(localStorage.getItem('cacheList'));
+//     //  console.log("newcacheListlocal :",NewCacheList);
      
      
      
-     // Requiring the lodash library 
+//      // Requiring the lodash library 
 
-// var _ = require("lodash");
+// // var _ = require("lodash");
  
-// let foundelem = _.findKey(cacheList, {
-//     "productId":id
-// });
+// // let foundelem = _.findKey(cacheList, {
+// //     "productId":id
+// // });
 
-// console.log("found_elem: ",foundelem);
+// // console.log("found_elem: ",foundelem);
 
 
      
-    }
+//     }
 
-     const add=async(id)=>{
-       try {
-        const newCounter= doc(db,"webappdata",id)
-        const get=await getDoc(newCounter)
-        addList.push(get?.data())
-        setAddList(addList)
-        // console.log("addList: ",addList);
-       } catch (error) {
-        console.log("error: ",error);
-       }
-     }
+    //  const add=async(id)=>{
+    //    try {
+    //     const newCounter= doc(db,"webappdata",id)
+    //     const get=await getDoc(newCounter)
+    //     addList.push(get?.data())
+    //     setAddList(addList)
+    //     // console.log("addList: ",addList);
+    //    } catch (error) {
+    //     console.log("error: ",error);
+    //    }
+    //  }
 
     const handleBtnClose =()=>{//for close modal and reset Counter,Size on close icon button  
       handleOpen()
@@ -137,7 +265,7 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
             </div>
             {isCartOnNav && <div className='modal-footer flex justify-between items-center px-2 w-full'>
                 <div className='flex justify-between items-center gap-x-2'>
-                   <button className='rounded-full text-orange-500 text-xs px-4 py-1 font-semibold border border-orange-500' onClick={()=>{updateData(keyid),add(keyid)}}>Add to cart</button>
+                   <button className='rounded-full text-orange-500 text-xs px-4 py-1 font-semibold border border-orange-500' onClick={()=>updateCart()}>Add to cart</button>
                    <button className='text-gray-500 text-xs font-semibold' onClick={handleBtnCancel}>cancel</button>
                 </div>
                 <SpanIcon content={""} costOrCount={`${handleCost()}$`} spanClass={"text-gray-500"} handleOnClic={""}>

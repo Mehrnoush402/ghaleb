@@ -4,7 +4,7 @@ import Body from '../components/origincomponent/Body'
 import { useState , createContext } from 'react';
 import UseFetch from '../hooks/UseFetch';
 // export const UserContext = createContext({count: 0 , handleCount:()=>{},color:false,handleColor:()=>{}});
-export const  DataText = createContext({count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},counter:0,setCounter:()=>{}, increaseCounter:()=>{} ,decreaseCounter:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:0,setColor:()=>{},addList:[],setAddList:()=>{}});
+export const  DataText = createContext({count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},counter:0,setCounter:()=>{}, increaseCounter:()=>{} ,decreaseCounter:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:0,setColor:()=>{},addList:[],setAddList:()=>{},modalIndex:0, setModalIndex:()=>{}});
 
 const Home = () => {
   const [count, setCount] = useState(0)
@@ -14,6 +14,7 @@ const Home = () => {
   const [totalCounterCost, setTotalCounterCost] = useState(0)
   const [addList,setAddList]=useState([])
   const[cacheList]=UseFetch()
+  const [modalIndex, setModalIndex] = useState(0)
   
   
 
@@ -49,7 +50,7 @@ const Home = () => {
   }
   return (
     <>
-    <DataText.Provider value={{count,increaseCount,decreaseCount,counter,setCounter,increaseCounter,decreaseCounter,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList}}>
+    <DataText.Provider value={{count,increaseCount,decreaseCount,counter,setCounter,increaseCounter,decreaseCounter,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList,modalIndex, setModalIndex}}>
        <PrimaryLayout>
           <Body/>
        </PrimaryLayout>
