@@ -19,41 +19,17 @@ import UseLocalStorage from '../../hooks/UseLocalStorage';
 const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,classModalBody,keyid,sizeIndex,headerModalClass}) => {
   const{counter,setCounter,sizeList,totalCounterCost,setTotalCounterCost,setColor,addList,setAddList,setIsUpdate}=useContext(DataText)
   const[cacheList,list]=UseFetch()
-  // const[data,setData]=useState({
-  //   cost:0,
-  //   counterProduct:0,
-  //   material:"",
-  //   name:"",
-  //   productId:0,
-  //   rateStar:0,
-  //   size:""
-  // })
+  const[data,setData]=useState({
+    cost:0,
+    counterProduct:0,
+    material:"",
+    name:"",
+    productId:0,
+    rateStar:0,
+    size:""
+  })
    const [fetchedData, setFetchedData] = useState({})
 
-  // useEffect(() => {
-  //   const fetchData = async()=>{
-  //    try {
-  //     const docProduct= doc(db,"webappdata",`${keyid}`)
-  //     const dataProduct=await getDoc(docProduct)
-      
-  //     if (dataProduct.exists()) {
-  //       console.log("Document data:", dataProduct.data());
-       
-  //       setFetchedData((prevData) => ({
-  //         ...prevData,
-  //         ...dataProduct.data(),
-  //       }));
-  //     }
-  //     console.log("state1 : ",fetchedData);
-  //    }
-  //     catch (error) {
-  //        console.log("error: ",error);
-  //    }
-  //   }
-  //   fetchData()
-   
-    
-  // }, [`${keyid}`])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,41 +39,13 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
   
         if (dataProduct.exists()) {
           console.log("Document data:", dataProduct.data());
-          setFetchedData(dataProduct.data());
+          setFetchedData((prevData) => ({
+                    ...prevData,
+                    ...dataProduct.data(),
+                  }));
+          
 
-  // setData((prevData) => ({
-  //   ...prevData,
-  //   cost: dataProduct.data().cost || 0,
-  //   counterProduct: dataProduct.data().counterProduct || 0,
-  //   material: dataProduct.data().material || "",
-  //   name: dataProduct.data().name || "",
-  //   productId: dataProduct.data().productId || 0,
-  //   rateStar: dataProduct.data().rateStar || 0,
-  //   size: dataProduct.data().size || "",
-  // }));
   
-          // setFetchedData((prevData) => {
-          //   return {
-          //     ...prevData,
-          //     ...dataProduct.data(),
-          //   };
-          // });
-            // setData(prevState=>({
-            //       ...prevState,
-            //       [dataProduct.data().key]: [dataProduct.data().value]
-            //     }))
-                // setData((prevData) => ({
-                //   ...prevData,
-                //   cost: 0,
-                //   counterProduct: 0,
-                //   material: "",
-                //   name: "",
-                //   productId: 0,
-                //   rateStar: 0,
-                //   size: "",
-                //   [dataProduct.data().key]: [dataProduct.data().value]
-                // }));
-         
   
       
         }
@@ -111,13 +59,16 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
   
   
 
-//  useEffect(() => {
-//   setData(prevState=>({
-//     ...prevState,
-//     [fetchedData.key]:[fetchedData.value]
-//   }))
-//   console.log("data2 : ", data);
-//  }, [fetchedData])
+ useEffect(() => {
+  setData(prevState=>({
+    ...prevState,
+    [fetchedData.key]:[fetchedData.value]
+  
+  }))
+  console.log("data in setData:",data);
+  console.log("fetchedData:",fetchedData);
+
+ }, [fetchedData])
  
 
   // const setCartInfo =()=>{
@@ -131,10 +82,11 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
   const updateCart=async()=>{
     try {
       const newData= doc(db,"webappdata",`${keyid}`)
-      const updateData= await updateDoc(newData,{ ...fetchedData,counterProduct: counter,size:sizeList[sizeIndex]})
+      await updateDoc(newData,{ ...fetchedData,counterProduct: counter,size:sizeList[sizeIndex]})
       const docProduct = doc(db, "webappdata", `${keyid}`);
         const dataProduct = await getDoc(docProduct);
-      setFetchedData(prevState=>({
+        console.log("data product.data",dataProduct.data());
+        setFetchedData(prevState=>({
         ...prevState,
         ...dataProduct.data()
         // counterProduct: counter,
@@ -145,8 +97,8 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
       
         addList.push(fetchedData)
         setAddList(addList)
-        console.log("state2 : ",fetchedData);
-        // console.log("addList: ",addList);
+        console.log("fetchedData2 : ",fetchedData);
+        console.log("addList: ",addList);
     } catch (error) {
       console.log("error: ",error);
     }
