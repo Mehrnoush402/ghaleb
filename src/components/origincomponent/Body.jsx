@@ -1,23 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import NavComponent from '../bodycomponent/NavComponent'
 import Discount from '../bodycomponent/Discount'
 import Products from '../bodycomponent/product/Products'
-import { createContext } from 'react'
-// export const DataText=createContext({counter:0, increaseCounter:()=>{} ,decreaseCounter:()=>{}})
+
 
 
 const Body = () => {
-  // const [counter, setCounter] = useState(0)
-  // const increaseCounter =()=>{
-  //   setCounter(counter+1)
-
-  //  }
-  //  const decreaseCounter =()=>{
-  //   setCounter(counter-1)
-
-  //  }
-  return (
-    <div  className='w-full bg-gray-200 px-4'>
+   return (
+    <div  className='w-4/6 bg-gray-200 px-4 h-fit xl:h-fit xl:w-[80%] lg:h-screen lg-w-[80%] md:w-5/6 md:h-fit sm:px-3 sm:py-1 sm:w-full sm:h-fit'>
      
         <NavComponent/>
         <Discount/>

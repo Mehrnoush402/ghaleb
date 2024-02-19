@@ -2,45 +2,22 @@ import React from 'react'
 import PrimaryLayout from '../components/PrimaryLayout'
 import Body from '../components/origincomponent/Body'
 import { useState , createContext } from 'react';
-import UseFetch from '../hooks/UseFetch';
-// export const UserContext = createContext({count: 0 , handleCount:()=>{},color:false,handleColor:()=>{}});
-export const  DataText = createContext({count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},counter:0,setCounter:()=>{}, increaseCounter:()=>{} ,decreaseCounter:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:0,setColor:()=>{},addList:[],setAddList:()=>{},modalIndex:0, setModalIndex:()=>{}});
+export const  DataText = createContext({addListId: [], setAddListId:()=>{},fixStar: true , setFixStar:()=>{},productData: {} , setProductData:()=>{}, list: [] , setList:()=>{},inputValue: 0 , setInputValue:()=>{}, count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:-1,setColor:()=>{},addList:[],setAddList:()=>{},modalIndex:0, setModalIndex:()=>{}});
 
 const Home = () => {
   const [count, setCount] = useState(0)
-  const [counter, setCounter] = useState(0)
+  const [productData,setProductData]=useState({})
   const [sizeList,setSizeList]=useState(['S','M','L','XL','XXL'])//for set content size in db
-  const [color, setColor] = useState()//for set index of Size component for set index size and set to db,onclick to cancel button modal
+  const [color, setColor] = useState(-1)//for set index of Size component for set index size and set to db,onclick to cancel button modal
   const [totalCounterCost, setTotalCounterCost] = useState(0)
   const [addList,setAddList]=useState([])
-  const[cacheList]=UseFetch()
+  const[list,setList]=useState([])
+  const [addListId,setAddListId]=useState([])
   const [modalIndex, setModalIndex] = useState(0)
-  
-  
-
-  
-  
+  const [inputValue, setInputValue] = useState(0)
+  const [fixStar, setFixStar] = useState(false)
  
-  // const [color, setColor] = useState(false)
-  // const handleColor = ()=>{
-  //   setColor(!color)
-  // }
-  // const handleCount =()=>{
-  //     // color?setCount(count-1):setCount(count+1)
-  //     setCount(count+1)
-  // }
-
-  const increaseCounter =()=>{
-    setCounter(counter+1)
-
-   }
-   const decreaseCounter =()=>{
-    if (counter>0) {
-      setCounter(counter-1)
-    }
-
-   }
-
+  
   const increaseCount =()=>{
     setCount(count+1)
   }
@@ -50,7 +27,7 @@ const Home = () => {
   }
   return (
     <>
-    <DataText.Provider value={{count,increaseCount,decreaseCount,counter,setCounter,increaseCounter,decreaseCounter,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList,modalIndex, setModalIndex}}>
+    <DataText.Provider value={{addListId,setAddListId,fixStar, setFixStar,productData,setProductData,inputValue,setInputValue,list,setList,count,increaseCount,decreaseCount,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList,modalIndex, setModalIndex}}>
        <PrimaryLayout>
           <Body/>
        </PrimaryLayout>

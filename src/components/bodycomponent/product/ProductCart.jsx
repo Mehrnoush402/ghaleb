@@ -1,16 +1,14 @@
 import React from 'react'
 import ProductPicture from './ProductPicture'
 import ProducsExplain from './ProducsExplain'
-import UseModal from '../../../hooks/UseModal'
-import { createPortal } from 'react-dom'
-import Modal from '../../base/Modal'
-const ProductCart = ({children,src,cost,productName,materialProduct,classProduc,productCartId,pictureStyle,explainStyle,isOpen,starFix,handleOpen}) => {
+
+const ProductCart = ({starClass,productData,isAdded,starFixInAddList,fixStar,cartIndex,children,src,cost,productName,materialProduct,classProduc,productCartId,pictureStyle,explainStyle,isOpen,handleOpen}) => {
  
   return (
    <>
-    <div className={`${classProduc} md:w-[45%] sm:w-full rounded`}>
-      <ProductPicture isOpen={isOpen} src={src} keyid={productCartId} pictureStyle={pictureStyle} handleOpen={handleOpen}/>
-      <ProducsExplain starFix={starFix} cost={cost} productName={productName} materialProduct={materialProduct} keyid={productCartId} explainStyle={explainStyle}/>
+    <div className={`${classProduc} md:w-[45%] md:items-center md:p-3 sm:w-[50%] rounded`}>
+      <ProductPicture isOpen={isOpen} productData={productData} isAdded={isAdded} cartIndex={cartIndex} src={src} keyid={productCartId} pictureStyle={pictureStyle} handleOpen={handleOpen}/>
+      <ProducsExplain starClass={starClass} fixStar={fixStar}  starFixInAddList={starFixInAddList} cost={cost} productName={productName} materialProduct={materialProduct} keyid={productCartId} explainStyle={explainStyle}/>
       {children}
     </div>
    
