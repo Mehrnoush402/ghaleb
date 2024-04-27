@@ -26,7 +26,7 @@ const RegisterForm = () => {
       <div className="w-[40%] bg-white sm:w-[75%] md:w-[50%] lg:w-[70%]">
     <Formik 
      
-     initialValues={{name:'',family:'',phone:'',address:'',email: '',password:'',copypassword:'',choiceList:[],wishLists:[],rateStarsList:[],isAddedList:[] }}
+     initialValues={{name:'',family:'',phone:'',address:'',email: '',password:'',copypassword:'',choiceList:[],wishLists:[],rateStarsList:[]}}
      validationSchema={Yup.object({
        // firstName: Yup.string()
        //   .max(15, 'Must be 15 characters or less')

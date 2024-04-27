@@ -91,7 +91,6 @@
       "email": "Ebrahimi.M.9696@gmail.com",
       "password": "627096mm",
       "copypassword": "627096mm",
-      "isAddedList": [],
       "wishLists": [
         "3ffe"
       ],
@@ -149,7 +148,6 @@
       "email": "Gholami.A@gmail.com",
       "password": "12121212",
       "copypassword": "12121212",
-      "isAddedList": [],
       "wishLists": [],
       "rateStarsList": [
         {
@@ -205,7 +203,6 @@
       "email": "Majid@gmail.com",
       "password": "62626262",
       "copypassword": "62626262",
-      "isAddedList": [],
       "choiceList": [],
       "wishLists": [],
       "rateStarsList": []
@@ -219,7 +216,6 @@
       "email": "Parvin.S.@Yahoo.com",
       "password": "09090909",
       "copypassword": "09090909",
-      "isAddedList": [],
       "choiceList": [],
       "wishLists": [],
       "rateStarsList": []
@@ -235,8 +231,8 @@
       "copypassword": "89898989",
       "choiceList": [],
       "wishLists": [],
-      "rateStarsList": [],
-      "isAddedList": []
+      "rateStarsList": []
+      
     }
   ]
 }
