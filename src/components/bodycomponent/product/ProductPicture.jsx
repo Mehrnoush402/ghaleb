@@ -12,8 +12,8 @@ const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen}) =>
    const [color, setColor] = useState(false)//for set red heart on every product 
    const {increaseCount,decreaseCount,setModalIndex,fixStar, setFixStar,list}=useContext(DataText)
    const [showSvg, setShowSvg] = useState(false)//for show & hide svg on center of evrey picture on hover it
-   const [productInfo, setProductInfo] = useState()
-   const [isAddedInfo, setIsAddedInfo] = useState(false)// empty object for set item that get of database by id
+   const [productInfo, setProductInfo] = useState()// empty object for set item that get of database by id
+   const [isAddedInfo, setIsAddedInfo] = useState(false)//this boolean is for set trah icon & green background on every picture that is in choiceList for every user
    const[state,dispatch]=useReducer(updateReducer,list)
    const{loginUser,setLoginUser}=useContext(loginData)
   //  const [fixHeart, setFixHeart] = useState(false)
@@ -26,15 +26,9 @@ const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen}) =>
   // }, [productData])
 
   useEffect(() => {//for set trash icon when Add to cart in modal in the same time on every product that added to cart we need get data of database again in useEffect
-    // const fetchProduct=async()=>{
-    //  const data = await getProduct(keyid)
-    //  setIsAddedInfo(data.data)
-    // }
-    // fetchProduct();
-
     const cheackIsAdded=async()=>{
       try {
-      const data = await getProduct(keyid)
+      const data = await getProduct(keyid)//if we dont get productInfo of db cant set trash icon and green background in same time on every picture
       setProductInfo(data.data)
       if (loginUser?.id) {
       const isAdded=  loginUser?.choiceList?.some((item)=>item?.id==keyid)
@@ -49,6 +43,7 @@ const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen}) =>
     }
     cheackIsAdded()
   }, [isAddedInfo,productInfo])
+
   
   useEffect(() => {
     const handleFixHeart=()=>{
