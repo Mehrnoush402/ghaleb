@@ -2,8 +2,9 @@ import React, { useEffect, useReducer, useState } from 'react'
 import SpanIcon from './SpanIcon';
 import { DataText } from '../../views/Home';
 import { useContext } from 'react';
-import { updateProduct } from '../../servicies/productsServicies';
+import { updateProduct, updateUser } from '../../servicies/productsServicies';
 import { updateReducer } from '../../reducers/updateReducer';
+import { loginData } from '../../App';
 
   
 
@@ -12,7 +13,8 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
   const{addListId,setAddListId,inputValue,setInputValue,sizeList,totalCounterCost,setTotalCounterCost,setColor,color,addList,setAddList,list}=useContext(DataText)
   const[state,dispatch]=useReducer(updateReducer,list)
   const [productInfo, setProductInfo] = useState(productData)//when modal becomes open set productData of a data that comes of props on state
-  
+  const{loginUser,setLoginUser}=useContext(loginData)
+
   const handleBtnClose =()=>{//for close modal and reset Counter,Size on close icon button  
     handleOpen() //for change true to false & upside down for opennig & closing modal
     setInputValue(0) //when modal closed input value becomes reset
@@ -25,18 +27,27 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
 
  
   const updateCart=async()=>{//for every update you dont need to get it of batabase at first time because you have id &  can access to it with id
-    if (inputValue==0 || color == -1 ) {
-      alert("please chose size & counter for this product")
-    }
-    else{
-      const updatedData= await updateProduct({...productInfo,counterProduct: inputValue,size:sizeList[sizeIndex],isAddedInCart:true},keyid)
-      dispatch({type:"update",data:updatedData.data})
-      addList.push(updatedData.data)
-      setAddList(addList)
-      localStorage.setItem("addList",JSON.stringify(addList))
-      handleBtnClose()
+    if (loginUser?.id) {
+      if (inputValue==0 || color == -1 ) {
+        alert("please choose size & counter for this product")
+      }
+      else{
+        const updatedData= await updateProduct({...productInfo,counterProduct: inputValue,size:sizeList[sizeIndex]},keyid)
+        dispatch({type:"update",data:updatedData.data})
+        loginUser?.choiceList.push(updatedData.data)
+        // loginUser?.isAddedList.push({"ProductId":keyid,"isAdded":true})
+        setLoginUser(loginUser)
+        await updateUser(loginUser,loginUser?.id)
        
-    }   
+        // addList.push(updatedData.data)
+        // setAddList(addList)
+        // localStorage.setItem("basketList",JSON.stringify(loginUser))
+        handleBtnClose()
+         
+      }   
+    }else{
+      alert("Please sign in")
+    }
     
   }
  

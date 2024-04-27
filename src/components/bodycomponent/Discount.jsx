@@ -1,7 +1,10 @@
 import React from 'react'
 import Image from '../base/Image'
 import icons from '../../assets/images/icons.png'
+import {useSelector} from 'react-redux'; 
+
 const Discount = () => {
+  const users=useSelector(state=>state.usersList.usersList)
   return (
     //
     <div className="flex justify-between items-center bg-orange-500 w-full mt-2 bg-contain bg-center bg-no-repeat" style={{ backgroundImage: `url(${icons})` }}> 

@@ -8,21 +8,25 @@ import HandleCount from '../../base/HandleCount'
 import Size from '../../base/Size'
 import DeliveryPolicy from '../DeliveryPolicy'
 import { getProducts } from '../../../servicies/productsServicies'
+import { loginData } from '../../../App'
 
 
 
 const Products = () => {
   const {addListId,modalIndex,list,setList}=useContext(DataText)
   const [openCart,handleOpenCart]=UseModal(false)
-  const [sizeindex, setIndex] = useState(0)
-  // const [isAdded, setIsAdded] = useState(true)
+  const [sizeIndex, setIndex] = useState(0)// sizeIndex is for set size to db in modal & setIndex uses as a calback in getIndex for get index in Size component 
+
+
+  
   
 
-  useEffect(() => {
+  useEffect(() => {//fetchAllDataProduct of db & set in setList 
      const fetchAllProducts=async()=>{
       try {
         const{data:allProductsData}=await getProducts()
         setList(allProductsData)
+
       } catch (error) {
         console.log("error",error);
       }
@@ -48,41 +52,39 @@ const Products = () => {
     setIndex(index)
  }
 
-//  const getBoolean = (props) =>{ //calback for get boolean of productPicture component
-//   console.log("props",props);
-//   setIsAdded(props)
-// }
-  
   
   return (
     <div className='w-full flex flex-wrap gap-y-4 mt-6 justify-between'>
 
       {list?.map((item,index)=>{ 
-       if (addListId.includes(item.id)) {
+      //  if (addListId.includes(item.id)) {
         return(
           <ProductCart 
             fixStar={false} isAdded={item?.isAddedInCart} productData={item} pictureStyle={"w-full h-2/3 md:w-[60%] sm:w-[70%]"} 
             cartIndex={item.productId}
-            handleOpen={()=>handleOpenCart()} 
+            handleOpen={()=>handleOpenCart()}//for open modal 
             explainStyle={"w-full mt-2 md:w-[80%] sm:w-[90%]"} key={item?.id}
             productCartId={item?.id} src={item?.src} cost={item?.cost} 
             classProduc={"flex flex-col items-center w-[23%]"}
             productName={item?.name} materialProduct={item?.material}
+           
           />
       )
-       }
-       else{
-        return(
-        <ProductCart 
-          fixStar={false}  isAdded={item?.isAddedInCart} productData={item} pictureStyle={"w-full h-2/3 md:w-[60%] sm:w-[70%]"} 
-          cartIndex={item.productId}
-          handleOpen={()=>handleOpenCart()} 
-          explainStyle={"w-full mt-2 md:w-[80%] sm:w-[90%]"} key={item?.id}
-          productCartId={item?.id} src={item?.src} cost={item?.cost} 
-          classProduc={"flex flex-col items-center w-[23%]"}
-          productName={item?.name} materialProduct={item?.material}
-        />
-    )}
+      //  }
+    //    else{
+    //     return(//if  
+    //     <ProductCart 
+    //       fixStar={false}  isAdded={item?.isAddedInCart} productData={item} pictureStyle={"w-full h-2/3 md:w-[60%] sm:w-[70%]"} 
+    //       cartIndex={item.productId}
+    //       handleOpen={()=>handleOpenCart()} 
+    //       explainStyle={"w-full mt-2 md:w-[80%] sm:w-[90%]"} key={item?.id}
+    //       productCartId={item?.id} src={item?.src} cost={item?.cost} 
+    //       classProduc={"flex flex-col items-center w-[23%]"}
+    //       productName={item?.name} materialProduct={item?.material}
+       
+
+    //     />
+    // )}
         })}
 
        {/* //important point:iterate two list for return one component
@@ -93,11 +95,12 @@ const Products = () => {
       )})} */}
 
       {list?.map((item,index)=>{
-          if (index==modalIndex-1) {
+          if (index==modalIndex-1) {//this if is for build just one modal in project[modalIndex set in productPicture with cartIndex that is item?.productId ]
             return(
               createPortal(
-                <Modal keyid={list[index].id} productData={item} sizeIndex={sizeindex} isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={true}  classModal={"w-[30%] h-[95%] p-3  flex-wrap flex-row-reverse justify-between lg:w-[50%] lg:h-[60%] md:w-[50%] md:h-[65%] sm:w-[85%] sm:h-[70%]"} classProps={"justify-end items-start"} classModalBody={""} sendCount={""}>
-                  
+                <Modal keyid={list[index].id} productData={item} sizeIndex={sizeIndex} isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={true}  classModal={"w-[30%] h-[95%] p-3  flex-wrap flex-row-reverse justify-between lg:w-[50%] md:w-[50%] md:h-[60%] sm:w-[85%] sm:h-[60%]"} classProps={"justify-end items-start"} classModalBody={""} sendCount={""}>
+                     {/* fixStar is for set star fix in modal that goes with props diraling in Star component*/}
+                     {/* isOpen is for show productCart in Modal whithout trash icon and green effect */}
                      <ProductCart fixStar={true} isOpen={true} pictureStyle={"w-full h-2/3 md:w-[90%] md:h-[55%] sm:w-[50%] sm:h-[40%] lg:w-[60%] lg:h-[55%]"} productCartId={item?.id} explainStyle={"w-full mt-2 md:w-[90%] md:h-[35%] sm:w-[70%] sm:h-[20%]"} key={item.productId} src={item?.src} cost={item?.cost} productName={item?.name} materialProduct={item?.material} classProduc={"flex flex-col items-center w-[70%]"}/>
                      <HandleCount handleCountClass={"w-[35%] h-10 sm:w-[25%] h-6"}/>
                      <Size onEvent={getIndex} sizeClass={"w-[60%] sm:w-[40%]"} textSizeClass={"text-xs sm:text-xs sm:py-1"}/>

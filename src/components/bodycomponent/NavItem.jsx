@@ -1,48 +1,99 @@
-import React, { useContext, useEffect} from 'react'
+import React, { useContext, useEffect, useState} from 'react'
 import SpanIcon from '../base/SpanIcon'
 import UseModal from '../../hooks/UseModal'
 import { createPortal } from 'react-dom'
 import Modal from '../base/Modal'
 import ProductCart from './product/ProductCart'
-import { DataText } from '../../views/Home'
 import DeliverInformation from './DeliverInformation'
 import OrderSummery from './OrderSummery'
 import DeliveryPolicy from './DeliveryPolicy'
-
+import { loginData } from '../../App'
+import { useNavigate } from 'react-router-dom'
 
 const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambergureIconClass}) => {
-  const [openCart,handleOpenCart]=UseModal(false)
-  const{addList,setAddList}=useContext(DataText)
-  const [hambergurmenue, setHambergurmenue] = UseModal(false)
-
-  const totals =()=>{
-    let total=0;
-    addList?.map((item,index)=>{
-      total += item?.counterProduct;
-    })
-    return total;
-  } 
-  useEffect(() => {
-   const addListData=localStorage.getItem("addList")
-   setAddList(JSON.parse(addListData))
-  }, [addList])
-  
+  const navigate=useNavigate()
+  const [openCart,handleOpenCart]=UseModal(false)//for open modal on click cart
+  const [hambergurmenue, setHambergurmenue] = UseModal(false)//for open modal on hambergure menue when window screen become little
+  const{loginUser,setLoginUser}=useContext(loginData)
+  const [navLogin, setNavLogin] = useState("")//for show "Account" or user.name on navItem
+  const [loginUserStyle, setloginUserStyle] = useState('')//for set style for user.name on navItem
+  const [status, setStatus] = useState(true)//for set true & false when on click on user.name
+  const [toggele, setToggele] = useState("hidden")//for set when status is true log out div be show & inverse
+  const [windowWidth, setWindowWith] = useState(0)//for set width screen of window.innerWidth
+  // const [hiddenModal, setHiddenModal] = useState("hidden")
+   
+  // useEffect(() => {
+  //  const addListData=localStorage.getItem("basketList")
+  //  setLoginUser(JSON.parse(addListData))
+  // }, [loginUser])
+   
    const checkCart=()=>{//if cart is empty show alert
     
-    if (!addList.length) {
+    if (!loginUser?.choiceList.length) {
       alert("Your cart is empty! Please add some items to it");
     }
     else{
       handleOpenCart()
-      // console.log("getItem: ",getItem());
     }
    }
 
    const showHambergurMenue=()=>{
     setHambergurmenue()
-    
+    // windowWidth <=767?setHiddenModal("visible"):setHiddenModal("hidden")
    }
-  
+
+   useEffect(() => {//for set user.name in navItem $ Account name
+    const cheackLogin=()=>{
+
+      loginUser?.name?setNavLogin(loginUser?.name):setNavLogin("Account")
+      loginUser?.name?setloginUserStyle('text-sm font-bold'):setloginUserStyle('')
+
+     }
+     cheackLogin()
+   }, [navLogin])
+
+    const accountOnclick=()=>{//when click on account go to sign in page
+      navigate("/sign in")
+      
+     
+    }
+    
+    
+
+    // const onMouseUser=()=>{//for hover on user.name login
+    //   setStatus(true)
+    // }
+
+    // const outMouseUser=()=>{//for leave hover on user.name login
+    //   setStatus(false)
+    // }
+    //  useEffect(() => {//for toggle log out div on hover user.name login
+    //    const handleToggle=()=>{
+    //     status?setToggele("visible"):setToggele("hidden")
+    //    }
+    //    handleToggle()
+    //  }, [status])
+
+    const onclickUser=()=>{//when onclick to user.name log out div show & hide
+      setStatus(!status)
+      status?setToggele("visible"):setToggele("hidden")
+    }
+     
+     const handleLogOut=()=>{//when click on log out loginUser becomes empty & go to sign in page
+      setLoginUser({})
+      navigate("/sign in")
+     }
+
+     useEffect(() => {//for get width screen 
+       const getWidthScreen=()=>{
+         setWindowWith(window.innerWidth)
+        
+       }
+       getWidthScreen()
+       
+     }, [windowWidth])
+     
+     
   return (
     <>
       <div className={`${parentNavItemClass}`}>
@@ -53,13 +104,32 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
             <li className='sm:hover:bg-gray-300 sm:w-full'>Delivery</li>
         </nav>
         <nav className={`text-black list-none ${secoundNavItemClass}`}>
-            <li className='sm:hover:bg-gray-300 sm:w-full'>
-              <SpanIcon parentClass={"gap-x-1 sm:justify-end"} content={"Account"}>
+          
+            <li className='sm:hover:bg-gray-300 sm:w-full cursor-pointer relative'>
+            {loginUser?.id?
+            // when screen is less than 767 px,be only Log out span but when screen get bigger be only accoun or user.name with person icon
+              windowWidth <= 767 ? 
+              <div className='flex justify-end'>
+                 <span className='text-xs font-bold' onClick={()=>handleLogOut()}>Log Out</span>
+              </div>
+              :<SpanIcon parentClass={"gap-x-1 sm:justify-end"} userStyle={loginUserStyle} content={`${navLogin}`} handleOnClick={()=>{onclickUser()}}>
+              <div className={`${toggele} flex justify-center bg-white rounded-xl rounded-tr-none items-center absolute top-[20px] left-[20px] py-3 px-4`}>
+                <span onClick={()=>handleLogOut()}>Log out</span>
+              </div>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/>
               </svg>
               </SpanIcon>
+              
+              :
+              // when we dont have loginUser in hambergure menu we have only one person svg
+              <SpanIcon parentClass={"gap-x-1 sm:justify-end"} userStyle={loginUserStyle} content={`${navLogin}`} handleOnClick={()=>{accountOnclick()}}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664z"/>
+              </svg>
+              </SpanIcon>}
             </li>
+          
             <li className='sm:hover:bg-gray-300 sm:w-full' onClick={()=>checkCart()}>Cart</li>
         </nav>
     </div>
@@ -72,16 +142,20 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
         </svg>
       </button>
     </div>
+    
     {createPortal(<Modal isOpen={hambergurmenue} handleOpen={setHambergurmenue} isCartOnNav={false}
-        classProps={"justify-end mt-10"}  classModal={"w-1/2 flex-col p-4 h-[30vh] md:w-1/4 md:h-[20vh]"} classModalBody={"w-full h-[95%] flex justify-end"} headerModalClass={"justify-end"}
-      
-      >
-        <NavItem parentNavItemClass={"flex flex-col w-full items-end text-xs lg:hidden gap-y-2"}
-           firstNavItemClass={"w-full flex flex-col items-end gap-y-2 sm:text-end"}
-           secoundNavItemClass={"w-full flex flex-col items-end gap-y-2 sm:text-end"}
-           hambergureIconClass={"hidden"}/>
-  
-      </Modal>,document.body)}
+      classProps={"justify-end mt-10"}  classModal={"w-1/2 flex-col p-4 h-[30vh] md:w-1/4 md:h-[20vh]"} classModalBody={"w-full h-[95%] flex-col"} headerModalClass={"justify-end"}
+    
+    >
+      <span className='text-xs font-bold border-b-2 border-black'>{loginUser?.name}</span>
+      <NavItem parentNavItemClass={"flex flex-col w-full items-end text-xs lg:hidden gap-y-2"}
+         firstNavItemClass={"w-full flex flex-col items-end gap-y-2 sm:text-end"}
+         secoundNavItemClass={"w-full flex flex-col items-end gap-y-2 sm:text-end"}
+         hambergureIconClass={"hidden"}/>
+         
+
+    </Modal>,document.body)}
+    
 
       {createPortal(
       <Modal isOpen={openCart} handleOpen={handleOpenCart} isCartOnNav={false}  classProps={"justify-center items-center"}  classModal={"w-1/2 flex-col p-4 h-[80vh] lg:h-[60vh] md:h-[60vh] md:w-[70%] sm:w-[85%] sm:h-[70vh]"} classModalBody={"w-full h-[95%]"} headerModalClass={"justify-end"}>
@@ -89,7 +163,7 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
           <div className='leftDiv flex flex-col items-center w-[60%] gap-y-3 h-full'>
             <div className='topDiv h-2/3 overflow-y-scroll flex flex-col p-3 w-full border border-gray-300 rounded'>
               <p className="text-lg font-semibold sm:text-sm">Cart Details</p>
-              {addList?.map((item,index)=>{
+              {loginUser?.choiceList?.map((item,index)=>{
                 // {setTotalItemsCounter((prev) => prev + item?.counterProduct)} 
                return (<ProductCart productCartId={item?.id} fixStar={true} isOpen={true} pictureStyle={"w-[25%] h-[50%] sm:mt-4 lg:w-[35%] md:w-[45%] mb-3 sm:w-[55%] sm:h-[35%] sm:mt-0"} explainStyle={"w-[75%] h-full mt-10 sm:h-[50%] sm:gap-y-0 sm:mt-2 sm:w-[90%]"} key={index} src={item?.src} cost={item?.cost*item?.counterProduct} productName={item?.name} materialProduct={item?.material}
                 classProduc={"flex relative justify-between items-center sm:items-start w-[70%] lg:w-[90%] md:w-[95%] sm:w-[95%] sm:h-[100px] gap-x-6 sm:gap-x-4"} starClass={"sm:w-[10px] sm-h-[10px]"}>
@@ -107,7 +181,7 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
             </div>
           </div>
           <div className='rightDiv h-full flex flex-col justify-between w-[40%] border border-gray-300 rounded'>
-              <OrderSummery totals={totals()}/>
+              <OrderSummery totals={"0"}/>
               <div className='bg-gray-100'>
                 <DeliveryPolicy margin={"ml-3 md:ml-1 sm:gap-y-4 sm:ml-0"}/>
               </div>

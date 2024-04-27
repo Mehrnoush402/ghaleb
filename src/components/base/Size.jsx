@@ -8,7 +8,8 @@ const Size = ({onEvent,sizeClass,textSizeClass}) => {
   const{sizeList,color,setColor}=useContext(DataText)
      
   const handleIndex = (index)=>{ //callback to send index to parent(Products component)
-    setColor(index)
+    setColor(index)//is context state for set index of every button  that when is same with index div button beckground becomes orange & other buttons background
+    // become white
     return index
   }
  

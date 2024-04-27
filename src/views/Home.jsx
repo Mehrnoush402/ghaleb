@@ -2,7 +2,9 @@ import React from 'react'
 import PrimaryLayout from '../components/PrimaryLayout'
 import Body from '../components/origincomponent/Body'
 import { useState , createContext } from 'react';
-export const  DataText = createContext({addListId: [], setAddListId:()=>{},fixStar: true , setFixStar:()=>{},productData: {} , setProductData:()=>{}, list: [] , setList:()=>{},inputValue: 0 , setInputValue:()=>{}, count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:-1,setColor:()=>{},addList:[],setAddList:()=>{},modalIndex:0, setModalIndex:()=>{}});
+
+
+export const  DataText = createContext({addListId: [],setCount:()=>{}, setAddListId:()=>{},fixStar: true , setFixStar:()=>{},productData: {} , setProductData:()=>{}, list: [] , setList:()=>{},inputValue: 0 , setInputValue:()=>{}, count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:-1,setColor:()=>{},addList:[],setAddList:()=>{},modalIndex:0, setModalIndex:()=>{}});
 
 const Home = () => {
   const [count, setCount] = useState(0)
@@ -17,6 +19,8 @@ const Home = () => {
   const [inputValue, setInputValue] = useState(0)
   const [fixStar, setFixStar] = useState(false)
  
+
+ 
   
   const increaseCount =()=>{
     setCount(count+1)
@@ -25,9 +29,11 @@ const Home = () => {
   const decreaseCount =()=>{
     setCount(count-1)
   }
+
+  
   return (
     <>
-    <DataText.Provider value={{addListId,setAddListId,fixStar, setFixStar,productData,setProductData,inputValue,setInputValue,list,setList,count,increaseCount,decreaseCount,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList,modalIndex, setModalIndex}}>
+    <DataText.Provider value={{addListId,setAddListId,fixStar, setFixStar,productData,setProductData,inputValue,setInputValue,list,setList,count,setCount,increaseCount,decreaseCount,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList,modalIndex, setModalIndex}}>
        <PrimaryLayout>
           <Body/>
        </PrimaryLayout>

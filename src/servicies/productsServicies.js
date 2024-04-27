@@ -25,3 +25,24 @@ export const deleteProduct=(productId)=>{  //for delete one productData of datab
     const url = `${SERVERURL}/list/${productId}`;
     return axios.delete(url);
 }
+
+export const createUser=(newUser)=>{ //for create one user in database(json-server)
+    const url=`${SERVERURL}/users`;
+    return axios.post(url,newUser)
+}
+
+export const getUser=(userId)=>{ //for get one user of database(json-server)
+    const url=`${SERVERURL}/users/${userId}`;
+    return axios.get(url)
+}
+
+export const getUsers=()=>{ //for get all users of database(json-server)
+    const url=`${SERVERURL}/users`;
+    return axios.get(url)
+}
+
+export const updateUser=(updateData,userId)=>{  //for update one user of database(json-server) with id
+    const url = `${SERVERURL}/users/${userId}`;
+    return axios.put(url,updateData);
+}
+

@@ -2,18 +2,21 @@ import React, { useContext, useEffect, useReducer, useState } from 'react'
 import SvgIcon from '../../base/SvgIcon'
 import Image from '../../base/Image'
 import { DataText } from '../../../views/Home'
-import { updateProduct,getProduct } from '../../../servicies/productsServicies'
+import { updateProduct,getProduct, updateUser } from '../../../servicies/productsServicies'
 import { updateReducer } from '../../../reducers/updateReducer'
+import { loginData } from '../../../App'
 
 
 
-const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen,productData}) => {
-   const [color, setColor] = useState(false)
-   const {increaseCount,decreaseCount,setModalIndex,fixStar, setFixStar,addList,setAddList,list}=useContext(DataText)
+const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen}) => {
+   const [color, setColor] = useState(false)//for set red heart on every product 
+   const {increaseCount,decreaseCount,setModalIndex,fixStar, setFixStar,list}=useContext(DataText)
    const [showSvg, setShowSvg] = useState(false)//for show & hide svg on center of evrey picture on hover it
-   const [productInfo, setProductInfo] = useState(productData)
-   const [isAddedInfo, setIsAddedInfo] = useState({})// empty object for set item that get of database by id
+   const [productInfo, setProductInfo] = useState()
+   const [isAddedInfo, setIsAddedInfo] = useState(false)// empty object for set item that get of database by id
    const[state,dispatch]=useReducer(updateReducer,list)
+   const{loginUser,setLoginUser}=useContext(loginData)
+  //  const [fixHeart, setFixHeart] = useState(false)
   //  const [calbackBoolean, setCalbackBoolean] = useState(true)
  
    
@@ -23,20 +26,73 @@ const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen,prod
   // }, [productData])
 
   useEffect(() => {//for set trash icon when Add to cart in modal in the same time on every product that added to cart we need get data of database again in useEffect
-    const fetchProduct=async()=>{
-     const data = await getProduct(keyid)
-     setIsAddedInfo(data.data)
+    // const fetchProduct=async()=>{
+    //  const data = await getProduct(keyid)
+    //  setIsAddedInfo(data.data)
+    // }
+    // fetchProduct();
+
+    const cheackIsAdded=async()=>{
+      try {
+      const data = await getProduct(keyid)
+      setProductInfo(data.data)
+      if (loginUser?.id) {
+      const isAdded=  loginUser?.choiceList?.some((item)=>item?.id==keyid)
+      isAdded?setIsAddedInfo(true):setIsAddedInfo(false)
+      }
+      else{
+        setIsAddedInfo(false)
+      }
+      } catch (error) {
+        console.log("error",error);
+      }
     }
-    fetchProduct();
-  }, [isAddedInfo])
+    cheackIsAdded()
+  }, [isAddedInfo,productInfo])
   
-   const handleShowSvg =()=>{
+  useEffect(() => {
+    const handleFixHeart=()=>{
+      if (loginUser?.id) {
+       const checkRedHeart=loginUser?.wishLists.find((item)=>item===keyid)
+       checkRedHeart?setColor(true):setColor(false)
+      }
+      else{
+       setColor(false)
+      }
+      
+     }
+     handleFixHeart()
+  }, [])
+  const handleShowSvg =()=>{
     setShowSvg(!showSvg)
     
    }
   
-  const handleCount = () =>{//increase & decrease number of colored hearts
-    color ? decreaseCount():increaseCount()
+  const handleCount = async() =>{//increase & decrease number of colored hearts
+    // color ? decreaseCount():increaseCount()
+if (loginUser?.id) {
+  setColor(!color)
+  
+  
+    
+    if (color) {
+      decreaseCount()
+      const deleteIndex=loginUser?.wishLists.findIndex((item)=>{return item.id==keyid})//set every id for product that has red heart icon in wishList for every user in db
+      loginUser?.wishLists.splice(deleteIndex,1)
+      await updateUser(loginUser,loginUser?.id)
+      setLoginUser(loginUser)
+   }
+  else{
+    increaseCount()
+    loginUser?.wishLists.push(keyid)
+    await updateUser(loginUser,loginUser?.id)
+    setLoginUser(loginUser)
+  }
+  
+}else{
+  alert("Please sign in")
+}
+
   }
 
 
@@ -47,31 +103,35 @@ const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen,prod
 
   const Delete=async()=>{//for every update you dont need to get it of batabase at first time because you have id &  can access to it with id
    
-    const updatedData= await updateProduct({...productInfo,isAddedInCart:false},keyid)
-    dispatch({type:"update",data:updatedData.data})
-    const deleteIndex=addList.findIndex((item)=>{return item.id==keyid})
-    addList.splice(deleteIndex,1)
-    setAddList(addList)
-    localStorage.setItem("addList",JSON.stringify(addList))
+    // const updatedData= await updateProduct({...productInfo,isAddedInCart:false},keyid)
+    // dispatch({type:"update",data:updatedData.data})
+    const deleteIndex=loginUser?.choiceList.findIndex((item)=>{return item.id==keyid})//for delete choicelist in user
+    loginUser?.choiceList.splice(deleteIndex,1)
+    await updateUser(loginUser,loginUser?.id)
+    setLoginUser(loginUser)
+    // localStorage.setItem("basketList",JSON.stringify(loginUser))
     
   }
 
   
-  const testFunction =()=>{
+  const testFunction =()=>{//for open modal on every product that is not in choiceList of every user
     handleOpen()
-    setModalIndex(cartIndex) //for open & close modal
-    setFixStar(!fixStar)//for set fals for fixStar in modal
+    setModalIndex(cartIndex) //for open & close just one modal[set by customizeIndex that comese of db and in products in createPortal open just one modal]
+    setFixStar(!fixStar)//for set false for fixStar in modal
    
   }
+
+  
+
+  
   
   return (
     <div className={`relative ${pictureStyle} rounded-lg`} onMouseEnter={handleShowSvg} onMouseLeave={()=>setShowSvg(false)}>
 
       {/* // for toggle & show heart svg ,bi-cart2 svg in modal and without modal */}
           {!isOpen ?
-            //list[cartIndex-1].isAddedInCart
             //if the item added to cart on every picture trash & tik icon set & else set heart and bag icon set on every picture
-            isAddedInfo?.isAddedInCart? <><div className='absolute rounded-lg inset-0 bg-green-200 opacity-25'></div>
+            isAddedInfo? <><div className='absolute rounded-lg inset-0 bg-green-200 opacity-25'></div>
             <Image src={src} width={""} height={""} imgclass={"w-full h-full"}/>
       
             <div onClick={()=>{Delete()}} className='absolute top-3 right-3'>
@@ -91,9 +151,9 @@ const ProductPicture = ({cartIndex,src,keyid,pictureStyle,isOpen,handleOpen,prod
             </>:<><div className='absolute rounded-lg inset-0 hover:bg-black hover:opacity-25'></div>
       <Image src={src} width={""} height={""} imgclass={"w-full h-full"}/>
 
-      <div onClick={()=>{setColor(!color),handleCount()}} className='absolute top-3 right-3'>
+      <div onClick={()=>{handleCount()}} className='absolute top-3 right-3'>
 
-        {color ? <SvgIcon position={"absolute top-1 right-1 bg-white"}>
+        {color? <SvgIcon position={"absolute top-1 right-1 bg-white"}>
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="red" class="bi bi-heart" viewBox="0 0 16 16">
           <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
         </svg>

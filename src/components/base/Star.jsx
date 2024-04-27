@@ -3,42 +3,128 @@ import React, { useContext, useReducer, useState } from 'react'
 // import { getDocs,collection,doc, getDoc, updateDoc } from 'firebase/firestore'
 import { DataText } from '../../views/Home';
 import { updateReducer } from '../../reducers/updateReducer';
-import { updateProduct,getProduct } from '../../servicies/productsServicies';
+import { updateProduct,getProduct, updateUser, getUser } from '../../servicies/productsServicies';
+import { loginData } from '../../App';
+import { useEffect } from 'react';
 
 
 const Star = ({keyid,fixStar,starClass}) => {
   const [rating, setRating] = useState(0);//for set index of star on click event
   const [hover,setHover]=useState(null)//for set index of star on hover event
   const {list} = useContext(DataText)
-  const [starState, setStarState] = useState({})//for get ratestar index of database
+  const [starState, setStarState] = useState(0)//for get ratestar index of database user
   const[state,dispatch]=useReducer(updateReducer,list)
+  const{loginUser,setLoginUser}=useContext(loginData)
+  const [userLocal, setUserLocal] = useState({})
+
+//   useEffect(() => {
+//     const handelLocal=()=>{
+//      const getStar= localStorage.getItem("userInfo")
+//     if (getStar) {
+//       const starFill=JSON.parse(getStar)
+//       setUserLocal(starFill)
+//     }
+    
+//    }
+//     handelLocal()
+   
+   
+// }, [])
+
+
+  // const getDataById=async()=>{//important point:If i get id here as an Entrance in this function i cant use keyid of props of Star(scope discussion)
+  //   try {
+  //      const dataProduct=await getProduct(keyid)
+  //      return dataProduct.data
+      
+  //   } catch (error) {
+  //     console.log("error",error);
+  //   }
+  // }
+
+  useEffect(() => {//for set default star of database when user get login
+   const checkStar=()=>{
+      if (loginUser?.id) {
+       const defaultfStar=loginUser?.rateStarsList?.find((item)=>item.idProduct==keyid)
+        if (defaultfStar) {
+          setRating(defaultfStar.rate)
+        }else{
+          setRating(0)
+        }
+      }else{
+        setRating(0)
+        
+      }
+      
+   }
+   checkStar()
+   }, [])
+
+   
+  const updateRating=async(index)=>{//set rateStar in database at first time
+    if (loginUser?.id) {
+      try {
+        setRating(index)
+        // const Product=await getProduct(keyid)
+        // const updatedData= await updateProduct({...Product.data,rateStar:index},keyid)
+        // dispatch({type:"update",data:updatedData.data})
+
+        if (loginUser?.rateStarsList?.length) { 
+        const findStar= loginUser?.rateStarsList.find((item)=>item.idProduct==keyid)
+        console.log("findStart",findStar);
+      
+           if (findStar) {
+             findStar['rate']=index
+              
+          }
+          else{
+             loginUser?.rateStarsList.push({"idProduct":keyid,"rate":index})
+           }
+        }else{
+         loginUser?.rateStarsList.push({"idProduct":keyid,"rate":index})
+        }
+       
+       setLoginUser(loginUser)
+       await updateUser(loginUser,loginUser?.id)
+       
+     } catch (error) {
+       console.log("error: ",error);
+     }
+    }else{
+      alert("Please Sign In")
+    }
+}
+
+
 
   
-  const getDataById=async()=>{//important point:If i get id here as an Entrance in this function i cant use keyid of props of Star(scope discussion)
+
+  const setStar = async()=>{//set rateStar in add to cart modal by getting of database of rateStarsList of every user in a state
+  
     try {
-       const dataProduct=await getProduct(keyid)
-       return dataProduct.data
-      
-    } catch (error) {
+      const starFill=await getUser(loginUser.id)//get updated data of loginUser that updated above
+      // const getStar= localStorage.getItem("userInfo")
+      // const starFill=JSON.parse(getStar)
+      if (loginUser?.id) {
+        // console.log("starFill",starFill);
+      //cheack the user set rate for stars for special product whit id(keyid)
+      // const haveFixStar=starFill?.data?.rateStarsList.some(item=>item.idProduct===keyid)
+      const findFixStar=starFill?.data?.rateStarsList.find((item)=>item.idProduct===keyid)
+       if (findFixStar) {
+        //set fixstar of database of rateStarsList for every one
+        setStarState(findFixStar?.rate)
+       }
+       else{
+        setStarState(0)
+       }
+      }else{
+        setStarState(0)
+      }
+    }catch (error) {
       console.log("error",error);
     }
-  }
-
-  const updateRating=async(index)=>{//set rateStar in database at first time
-      try {
-         setRating(index)
-         const Product=await getProduct(keyid)
-         const updatedData= await updateProduct({...Product.data,rateStar:index},keyid)
-         dispatch({type:"update",data:updatedData.data})
-        
-      } catch (error) {
-        console.log("error: ",error);
-      }
-  }
-
-  const setStar = async()=>{//set rateStar by getting of database in a state
-    const starFill=await getDataById()
-    setStarState(starFill?.rateStar)
+    
+    
    }
      
     
