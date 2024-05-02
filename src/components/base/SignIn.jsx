@@ -4,8 +4,12 @@ import { Formik, Form, Field, ErrorMessage, validateYupSchema } from 'formik';
 import * as Yup from 'yup';
 import Image from './Image';
 import '../../cssfiles/SignIn.css'
-import { getUsers } from '../../servicies/productsServicies';
+import { checkUser, getUsers } from '../../servicies/productsServicies';
 import { loginData } from '../../App';
+import welcomeGif from '../../assets/images/welcome.gif'
+import Swal from 'sweetalert2'
+
+
 const SignIn = () => {
   const navigate=useNavigate()
   const {loginUser,setLoginUser}=useContext(loginData)
@@ -35,41 +39,79 @@ const SignIn = () => {
      <Formik 
       
       initialValues={{email: '',password:'' }}
+      //from all users check one by one to check which email and pass is for which user
+          //method1:
+      onSubmit={async(values,{setFieldError,setSubmitting})=>{
+        //get all users for searching for the user that wants to login
+      const userData=await checkUser(values.email,values.password )
+       if(userData?.data){
+          Swal.fire({
+            title: `Welcome ${userData?.data?.name}!!`,
+            width: 600,
+            padding: "3em",
+            color: "#F28C28",
+            background: "#fff",
+            confirmButtonColor:"#F28C28",
+            backdrop: `
+            rgba(255,165,0,0.1)
+            url(${welcomeGif})
+            left top
+            no-repeat
+            `
+          });
+       
+          setLoginUser(userData?.data)
+          localStorage.setItem('user_local',JSON.stringify(userData?.data))
+          navigate('/')
+        }else{
+           Swal.fire({
+            icon: "error",
+            title: "Sorry...",
+            text: "email or password is not correct!!!",
+            confirmButtonColor:"#F28C28"
+            
+          });
+        } 
+      setSubmitting(false)
      
-      onSubmit={(values, { setSubmitting, setFieldError }) => {
-        // setTimeout(() => {
-        //   alert(JSON.stringify(values, null, 2));
-        //   setSubmitting(false);
-        // }, 400);
-         getUsers().then(result=>{
-            result.data.map(user=>{
-             if (user.email === values.email) {
-              if (user.password === values.password) {
-                alert("login successfully")
-                setLoginUser(user)
-                // setEnterUserInLocal(user)
-                
-                // localStorage.setItem("userInfo",JSON.stringify(user))//set localStorage at first time
-                navigate("/")
-                
-              }else{
-               
-                setFieldError('password', 'password is wrong');
-              
-              }
-              
-            }else if(values.email !== "" ||  user.email !== values.email){
-    
-              setFieldError('email', 'email is not already exit');
-              
-            }
-    
-          })
-        })
-        .catch(err =>console.log(err))
-        
-        setSubmitting(false);
       }}
+     
+      // onSubmit={(values, { setSubmitting, setFieldError }) => {
+      //   // setTimeout(() => {
+      //   //   alert(JSON.stringify(values, null, 2));
+      //   //   setSubmitting(false);
+      //   // }, 400);
+      //    getUsers().then(result=>{
+      //       result.data.map(user=>{
+      //        if (user.email === values.email) {
+      //         if (user.password === values.password) {
+      //           alert("login successfully")
+      //           setLoginUser(user)
+      //           console.log("loginUser in sign in",loginUser);
+      //           console.log("user",user);
+      //           // setEnterUserInLocal(user)
+                
+      //           // localStorage.setItem("userInfo",JSON.stringify(user))//set localStorage at first time
+      //           navigate("/")
+                
+      //         }else{
+               
+      //           setFieldError('password', 'password is wrong');
+              
+      //         }
+              
+      //       }else if(values.email !== "" ||  user.email !== values.email){
+    
+      //         setFieldError('email', 'email is not already exit');
+              
+      //       }
+    
+      //     })
+      //   })
+      //   .catch(err =>console.log(err))
+        
+      //   setSubmitting(false);
+      // }}
 
        validationSchema={validationSchema}
     >

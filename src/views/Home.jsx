@@ -4,7 +4,7 @@ import Body from '../components/origincomponent/Body'
 import { useState , createContext } from 'react';
 
 
-export const  DataText = createContext({addListId: [],setCount:()=>{}, setAddListId:()=>{},fixStar: true , setFixStar:()=>{},productData: {} , setProductData:()=>{}, list: [] , setList:()=>{},inputValue: 0 , setInputValue:()=>{}, count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:-1,setColor:()=>{},addList:[],setAddList:()=>{},modalIndex:0, setModalIndex:()=>{}});
+export const  DataText = createContext({addListId: [],setCount:()=>{}, setAddListId:()=>{},fixStar: true , setFixStar:()=>{},productData: {} , setProductData:()=>{}, list: [] , setList:()=>{},inputValue: 0 , setInputValue:()=>{}, count: 0 , increaseCount:()=>{} ,decreaseCount:()=>{},sizeList:[],setSizeList:()=>{},totalCounterCost:0,setTotalCounterCost:()=>{},color:-1,setColor:()=>{},addList:[],setAddList:()=>{},modalId:"", setModalId:()=>{}});
 
 const Home = () => {
   const [count, setCount] = useState(0)
@@ -15,7 +15,7 @@ const Home = () => {
   const [addList,setAddList]=useState([])
   const[list,setList]=useState([])
   const [addListId,setAddListId]=useState([])
-  const [modalIndex, setModalIndex] = useState(0)
+  const [modalId, setModalId] = useState("")
   const [inputValue, setInputValue] = useState(0)
   const [fixStar, setFixStar] = useState(false)
  
@@ -33,7 +33,7 @@ const Home = () => {
   
   return (
     <>
-    <DataText.Provider value={{addListId,setAddListId,fixStar, setFixStar,productData,setProductData,inputValue,setInputValue,list,setList,count,setCount,increaseCount,decreaseCount,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList,modalIndex, setModalIndex}}>
+    <DataText.Provider value={{addListId,setAddListId,fixStar, setFixStar,productData,setProductData,inputValue,setInputValue,list,setList,count,setCount,increaseCount,decreaseCount,sizeList,setSizeList,totalCounterCost,setTotalCounterCost,color,setColor,addList,setAddList,modalId, setModalId}}>
        <PrimaryLayout>
           <Body/>
        </PrimaryLayout>

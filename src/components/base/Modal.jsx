@@ -2,9 +2,11 @@ import React, { useEffect, useReducer, useState } from 'react'
 import SpanIcon from './SpanIcon';
 import { DataText } from '../../views/Home';
 import { useContext } from 'react';
-import { updateProduct, updateUser } from '../../servicies/productsServicies';
+import { getUser, updateProduct, updateUser } from '../../servicies/productsServicies';
 import { updateReducer } from '../../reducers/updateReducer';
 import { loginData } from '../../App';
+import { result } from 'lodash';
+import Swal from 'sweetalert2';
 
   
 
@@ -29,15 +31,24 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
   const updateCart=async()=>{//for every update you dont need to get it of batabase at first time because you have id &  can access to it with id
     if (loginUser?.id) {
       if (inputValue==0 || color == -1 ) {
-        alert("please choose size & counter for this product")
+        Swal.fire({
+          title: "not choose?",
+          text: "please choose size & counter for this product",
+          icon: "question",
+          confirmButtonColor:"#F28C28",
+        });
       }
       else{
         const updatedData= await updateProduct({...productInfo,counterProduct: inputValue,size:sizeList[sizeIndex]},keyid)
         dispatch({type:"update",data:updatedData.data})
         loginUser?.choiceList.push(updatedData.data)
         // loginUser?.isAddedList.push({"ProductId":keyid,"isAdded":true})
-        setLoginUser(loginUser)
-        await updateUser(loginUser,loginUser?.id)
+        await updateUser(loginUser,loginUser?.id).then(result=>{//when we do updateUser,if dont write then & catch ,dont wait to set in loginUser whithout refresh,so when we dont set at same time we need then & catch
+          setLoginUser(result?.data)
+        }).catch(err=>{
+          console.log("err",err);
+        })
+         
        
         // addList.push(updatedData.data)
         // setAddList(addList)
@@ -46,7 +57,13 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
          
       }   
     }else{
-      alert("Please sign in")
+     Swal.fire({
+        icon: "error",
+        title: "Sorry...",
+        text: "Please sign in!",
+        confirmButtonColor:"#F28C28"
+      
+      });
     }
     
   }

@@ -11,6 +11,7 @@ import { createUser } from '../../servicies/productsServicies';
 import { useDispatch } from 'react-redux';
 // import { adduser } from '../redux/slices/usersSlice';
 import { adduser } from '../../redux/slices/usersSlice';
+import Swal from 'sweetalert2';
 
 
 
@@ -28,12 +29,9 @@ const RegisterForm = () => {
      
      initialValues={{name:'',family:'',phone:'',address:'',email: '',password:'',copypassword:'',choiceList:[],wishLists:[],rateStarsList:[]}}
      validationSchema={Yup.object({
-       // firstName: Yup.string()
-       //   .max(15, 'Must be 15 characters or less')
-       //   .required('Required'),
        name:Yup.string().required('Entering the name is required'),
        family:Yup.string().required('Entering the family is required'),
-       phone:Yup.number().required('Entering the phone is required'),
+       phone:Yup.number().typeError('you must specify a number').required('Entering the phone is required'),
        address:Yup.string().required('Entering the address is required'),
        email: Yup.string().email('Invalid email address').required('Required')
       //  when we want handle customize validation for email or password we can use test methode of Yup library
@@ -75,7 +73,12 @@ const RegisterForm = () => {
       //    createUser(values)
       //    setSubmitting(false);
       //  }, 400);
+      Swal.fire({
+        title: "Your Register was Successfuly",
+        text:"Please sign in",
+        confirmButtonColor:"#F28C28"
        
+      });
         
          await createUser(values)
          navigate("/sign in")

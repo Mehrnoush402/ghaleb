@@ -9,6 +9,8 @@ import OrderSummery from './OrderSummery'
 import DeliveryPolicy from './DeliveryPolicy'
 import { loginData } from '../../App'
 import { useNavigate } from 'react-router-dom'
+import ModalProductCart from '../MdalProducts/ModalProductCart'
+import Swal from 'sweetalert2'
 
 const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambergureIconClass}) => {
   const navigate=useNavigate()
@@ -20,6 +22,7 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
   const [status, setStatus] = useState(true)//for set true & false when on click on user.name
   const [toggele, setToggele] = useState("hidden")//for set when status is true log out div be show & inverse
   const [windowWidth, setWindowWith] = useState(0)//for set width screen of window.innerWidth
+  const [sum, setSum] = useState(0)
   // const [hiddenModal, setHiddenModal] = useState("hidden")
    
   // useEffect(() => {
@@ -27,13 +30,29 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
   //  setLoginUser(JSON.parse(addListData))
   // }, [loginUser])
    
-   const checkCart=()=>{//if cart is empty show alert
+   const checkCart=()=>{//if cart is empty show sweetalert
     
-    if (!loginUser?.choiceList.length) {
-      alert("Your cart is empty! Please add some items to it");
-    }
-    else{
+    if (loginUser?.id) {
+      if (!loginUser?.choiceList.length) {
+        Swal.fire({
+         icon: "error",
+         title: "Sorry...",
+         text: "Your cart is empty! Please add some items to it!",
+         confirmButtonColor:"#F28C28"
+         
+       });
+     }
+     else{
       handleOpenCart()
+     }
+    }else{
+      Swal.fire({
+        icon: "error",
+        title: "Sorry...",
+        text: "Please Sign In!",
+        confirmButtonColor:"#F28C28"
+        
+      });
     }
    }
 
@@ -50,13 +69,26 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
 
      }
      cheackLogin()
-   }, [navLogin])
+   }, [loginUser?.name])
 
     const accountOnclick=()=>{//when click on account go to sign in page
       navigate("/sign in")
       
      
     }
+    
+    useEffect(() => {
+      let totals=0;
+     if (loginUser?.id) {
+      loginUser?.choiceList.map((item)=>{
+        totals+=item?.counterProduct
+      })
+      setSum(totals)
+     }
+     else{
+      setSum(0)
+     }
+    }, [loginUser?.choiceList])
     
     
 
@@ -80,7 +112,15 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
     }
      
      const handleLogOut=()=>{//when click on log out loginUser becomes empty & go to sign in page
+      Swal.fire({
+        title: "Your Log Out waz successfully!",
+        html: "I will close in 5 seconds.",
+        timer: 2000,
+        timerProgressBar: true,
+        confirmButtonColor:"#F28C28",
+      });
       setLoginUser({})
+      localStorage.clear()
       navigate("/sign in")
      }
 
@@ -91,7 +131,7 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
        }
        getWidthScreen()
        
-     }, [windowWidth])
+     }, [window.innerWidth])
      
      
   return (
@@ -165,10 +205,10 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
               <p className="text-lg font-semibold sm:text-sm">Cart Details</p>
               {loginUser?.choiceList?.map((item,index)=>{
                 // {setTotalItemsCounter((prev) => prev + item?.counterProduct)} 
-               return (<ProductCart productCartId={item?.id} fixStar={true} isOpen={true} pictureStyle={"w-[25%] h-[50%] sm:mt-4 lg:w-[35%] md:w-[45%] mb-3 sm:w-[55%] sm:h-[35%] sm:mt-0"} explainStyle={"w-[75%] h-full mt-10 sm:h-[50%] sm:gap-y-0 sm:mt-2 sm:w-[90%]"} key={index} src={item?.src} cost={item?.cost*item?.counterProduct} productName={item?.name} materialProduct={item?.material}
+               return (<ModalProductCart productData={item} isOpen={true} pictureStyle={"w-[25%] h-[50%] sm:mt-4 lg:w-[35%] md:w-[45%] mb-3 sm:w-[55%] sm:h-[35%] sm:mt-0"} explainStyle={"w-[75%] h-full mt-10 sm:h-[50%] sm:gap-y-0 sm:mt-2 sm:w-[90%]"} key={index} cost={item?.cost*item?.counterProduct}
                 classProduc={"flex relative justify-between items-center sm:items-start w-[70%] lg:w-[90%] md:w-[95%] sm:w-[95%] sm:h-[100px] gap-x-6 sm:gap-x-4"} starClass={"sm:w-[10px] sm-h-[10px]"}>
                               <div className='rounded-full bg-gray-300 text-orange-500 absolute w-6 h-6 flex justify-center items-center top-[75px] left-[45px] lg:top-[100px] md:top-[110px] md:left-[75px] sm:top-[42px] sm:left-[35px] sm:w-4 sm:h-4 sm:text-xs'>{item?.counterProduct}</div>
-                       </ProductCart>
+                       </ModalProductCart>
                        
                        
                          
@@ -181,7 +221,7 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
             </div>
           </div>
           <div className='rightDiv h-full flex flex-col justify-between w-[40%] border border-gray-300 rounded'>
-              <OrderSummery totals={"0"}/>
+              <OrderSummery totals={sum}/>
               <div className='bg-gray-100'>
                 <DeliveryPolicy margin={"ml-3 md:ml-1 sm:gap-y-4 sm:ml-0"}/>
               </div>

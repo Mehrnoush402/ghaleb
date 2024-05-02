@@ -18,20 +18,38 @@ const Footer = () => {
   //  }, [loginUser])
 
  useEffect(() => {
-  const fetchUser=async()=>{
+ 
     if (loginUser?.id) {
-      const allData=await getUser(loginUser?.id)
-    setLengthchoiceList(allData?.data?.choiceList?.length)
+     
+    setLengthchoiceList(loginUser?.choiceList?.length)
     // setLoginUser(allData?.data)
-    console.log("choiceList?.length",allData?.data?.choiceList?.length);
-    setCount(allData?.data?.wishLists?.length)
+   
+    setCount(loginUser?.wishLists?.length)
     }
     else{
       setLengthchoiceList(0)
     }
-  }
-  fetchUser()
- }, [loginUser])
+ 
+ }, [loginUser?.choiceList,loginUser?.wishLists])
+
+// useEffect(() => {
+//   const gettingLength=async()=>{
+//    if (loginUser?.id) {
+//      try {
+//        const userData = await getUser(loginUser?.id)
+//        setLoginUser(userData?.data)
+//        setCount(userData?.data?.wishLists.length)
+ 
+//      } catch (error) {
+//        console.log('error ', error);
+//      }
+//    }else{
+//      // setLogedInUser({})
+//      setCount(0)
+//    }
+//   }
+//   gettingLength()
+//  }, [loginUser])
  
 //   useEffect(() => {
 //     const calculateCosts =async()=>{

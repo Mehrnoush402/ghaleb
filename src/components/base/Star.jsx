@@ -6,9 +6,10 @@ import { updateReducer } from '../../reducers/updateReducer';
 import { updateProduct,getProduct, updateUser, getUser } from '../../servicies/productsServicies';
 import { loginData } from '../../App';
 import { useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 
-const Star = ({keyid,fixStar,starClass}) => {
+const Star = ({productData,fixStar,starClass}) => {
   const [rating, setRating] = useState(0);//for set index of star on click event
   const [hover,setHover]=useState(null)//for set index of star on hover event
   const {list} = useContext(DataText)
@@ -45,7 +46,7 @@ const Star = ({keyid,fixStar,starClass}) => {
   useEffect(() => {//for set default star of database when user get login
    const checkStar=()=>{
       if (loginUser?.id) {
-       const defaultfStar=loginUser?.rateStarsList?.find((item)=>item.idProduct==keyid)
+       const defaultfStar=loginUser?.rateStarsList?.find((item)=>item.idProduct==productData?.id)
         if (defaultfStar) {
           setRating(defaultfStar.rate)
         }else{
@@ -70,7 +71,7 @@ const Star = ({keyid,fixStar,starClass}) => {
         // dispatch({type:"update",data:updatedData.data})
 
         if (loginUser?.rateStarsList?.length) { 
-        const findStar= loginUser?.rateStarsList.find((item)=>item.idProduct==keyid)
+        const findStar= loginUser?.rateStarsList.find((item)=>item.idProduct==productData?.id)
         console.log("findStart",findStar);
       
            if (findStar) {
@@ -78,20 +79,29 @@ const Star = ({keyid,fixStar,starClass}) => {
               
           }
           else{
-             loginUser?.rateStarsList.push({"idProduct":keyid,"rate":index})
+             loginUser?.rateStarsList.push({"idProduct":productData?.id,"rate":index})
            }
         }else{
-         loginUser?.rateStarsList.push({"idProduct":keyid,"rate":index})
+         loginUser?.rateStarsList.push({"idProduct":productData?.id,"rate":index})
         }
        
-       setLoginUser(loginUser)
-       await updateUser(loginUser,loginUser?.id)
+        await updateUser(loginUser,loginUser?.id).then(result=>{//when we do updateUser,if dont write then & catch ,dont wait to set in loginUser whithout refresh,so when we dont set at same time we need then & catch
+          setLoginUser(result?.data)
+        }).catch(err=>{
+          console.log("err",err);
+        })
        
      } catch (error) {
        console.log("error: ",error);
      }
     }else{
-      alert("Please Sign In")
+     Swal.fire({
+        icon: "error",
+        title: "Sorry...",
+        text: "Please Sign In!",
+        confirmButtonColor:"#F28C28"
+        
+      });
     }
 }
 
@@ -101,15 +111,12 @@ const Star = ({keyid,fixStar,starClass}) => {
 
   const setStar = async()=>{//set rateStar in add to cart modal by getting of database of rateStarsList of every user in a state
   
-    try {
-      const starFill=await getUser(loginUser.id)//get updated data of loginUser that updated above
-      // const getStar= localStorage.getItem("userInfo")
-      // const starFill=JSON.parse(getStar)
+    
       if (loginUser?.id) {
-        // console.log("starFill",starFill);
-      //cheack the user set rate for stars for special product whit id(keyid)
-      // const haveFixStar=starFill?.data?.rateStarsList.some(item=>item.idProduct===keyid)
-      const findFixStar=starFill?.data?.rateStarsList.find((item)=>item.idProduct===keyid)
+        
+      // //cheack the user set rate for stars for special product whit id(keyid)
+      
+      const findFixStar=loginUser?.rateStarsList.find((item)=>item.idProduct===productData?.id)
        if (findFixStar) {
         //set fixstar of database of rateStarsList for every one
         setStarState(findFixStar?.rate)
@@ -120,9 +127,7 @@ const Star = ({keyid,fixStar,starClass}) => {
       }else{
         setStarState(0)
       }
-    }catch (error) {
-      console.log("error",error);
-    }
+   
     
     
    }
@@ -130,7 +135,7 @@ const Star = ({keyid,fixStar,starClass}) => {
     
   return (
     <div className="star-rating">
-      {fixStar && setStar() ? //if starRate set in database index for filling stars is <= it but if it set witn user it is <= rating
+      {fixStar && setStar()? //if starRate set in database index for filling stars is <= it but if it set witn user it is <= rating
          [...Array(5)].map((star, index) => {
           index += 1;
           
@@ -182,4 +187,5 @@ const Star = ({keyid,fixStar,starClass}) => {
 
 
 export default Star
+ 
  
