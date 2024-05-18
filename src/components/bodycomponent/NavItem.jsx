@@ -113,7 +113,7 @@ const NavItem = ({parentNavItemClass,firstNavItemClass,secoundNavItemClass,hambe
      
      const handleLogOut=()=>{//when click on log out loginUser becomes empty & go to sign in page
       Swal.fire({
-        title: "Your Log Out waz successfully!",
+        title: "Your Log Out was successfully!",
         html: "I will close in 5 seconds.",
         timer: 2000,
         timerProgressBar: true,
