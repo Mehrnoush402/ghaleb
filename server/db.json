@@ -3,11 +3,11 @@
     {
       "id": "b737",
       "cost": 10,
-      "counterProduct": "1200",
+      "counterProduct": 2,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "productId": 1,
-      "size": "XL",
+      "size": "M",
       "src": "https://i.im.ge/2024/01/21/YNDq5y.Rectangle-1.png"
     },
     {
@@ -23,11 +23,11 @@
     {
       "id": "2f2f",
       "cost": 30,
-      "counterProduct": 2,
+      "counterProduct": 1,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "productId": 3,
-      "size": "L",
+      "size": "XL",
       "src": "https://i.im.ge/2024/01/23/YVGDxm.Rectangle-3.png"
     },
     {
@@ -63,11 +63,11 @@
     {
       "id": "f66b",
       "cost": 70,
-      "counterProduct": 2,
+      "counterProduct": 3,
       "material": "Organic Cotton, Fair Trade quality",
       "name": "Rounded neck - T shirt 100% Cotton",
       "productId": 7,
-      "size": "S",
+      "size": "XL",
       "src": "https://i.im.ge/2024/01/23/YVz5tp.Rectangle-7.png"
     },
     {
@@ -99,14 +99,35 @@
       "rateStarsList": [
         {
           "idProduct": "b737",
-          "rate": 4
+          "rate": 3
         },
         {
           "idProduct": "3ffe",
           "rate": 4
         }
       ],
-      "choiceList": []
+      "choiceList": [
+        {
+          "id": "2f2f",
+          "cost": 30,
+          "counterProduct": 1,
+          "material": "Organic Cotton, Fair Trade quality",
+          "name": "Rounded neck - T shirt 100% Cotton",
+          "productId": 3,
+          "size": "XL",
+          "src": "https://i.im.ge/2024/01/23/YVGDxm.Rectangle-3.png"
+        },
+        {
+          "id": "f66b",
+          "cost": 70,
+          "counterProduct": 3,
+          "material": "Organic Cotton, Fair Trade quality",
+          "name": "Rounded neck - T shirt 100% Cotton",
+          "productId": 7,
+          "size": "XL",
+          "src": "https://i.im.ge/2024/01/23/YVz5tp.Rectangle-7.png"
+        }
+      ]
     },
     {
       "id": "52bc",

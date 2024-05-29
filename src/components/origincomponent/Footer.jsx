@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState} from 'react'
 import SpanIcon from '../base/SpanIcon'
 import { DataText } from '../../views/Home'
 import { loginData } from '../../App'
-import { getUser } from '../../servicies/productsServicies'
+
 
 
 const Footer = () => {
-  const {count,addList,setAddList,setCount}=useContext(DataText)
-  const{loginUser,setLoginUser}=useContext(loginData)
-  const [totalCost, setTotalCost] = useState(0)
+  const {count,setCount}=useContext(DataText)
+  const{loginUser}=useContext(loginData)
   const [lengthchoiceList, setLengthchoiceList] = useState(0)
 
   
@@ -32,43 +31,7 @@ const Footer = () => {
  
  }, [loginUser?.choiceList,loginUser?.wishLists])
 
-// useEffect(() => {
-//   const gettingLength=async()=>{
-//    if (loginUser?.id) {
-//      try {
-//        const userData = await getUser(loginUser?.id)
-//        setLoginUser(userData?.data)
-//        setCount(userData?.data?.wishLists.length)
- 
-//      } catch (error) {
-//        console.log('error ', error);
-//      }
-//    }else{
-//      // setLogedInUser({})
-//      setCount(0)
-//    }
-//   }
-//   gettingLength()
-//  }, [loginUser])
- 
-//   useEffect(() => {
-//     const calculateCosts =async()=>{
-//     let newDtata= await getUser(loginUser?.id)
-//     setLengthchoiceList(newDtata?.data?.choiceList?.length)
 
-//     let total=0;
-//     newDtata?.data?.choiceList?.map((item,index)=>{
-//       total += item?.cost*item?.counterProduct
-      
-  
-//     })
-//     console.log("loginUser?.choiceList?.length",loginUser?.choiceList?.length);
-//     setTotalCost(total)
-    
-//   }
-//   calculateCosts()
-  
-//  }, [loginUser?.choiceList?.length])
  
  const calculateCosts =()=>{
 
