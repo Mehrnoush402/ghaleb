@@ -28,7 +28,7 @@ const Modal = ({children,isOpen,handleOpen,isCartOnNav,classProps,classModal,cla
    }, [productData])
 
  
-  const updateCart=async()=>{//for every update you dont need to get it of batabase at first time because you have id &  can access to it with id
+  const updateCart=async()=>{//for every update you dont need to get it of database at first time because you have id &  can access to it with id
     if (loginUser?.id) {
       if (inputValue==0 || color == -1 ) {
         Swal.fire({
